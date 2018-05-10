@@ -48,17 +48,8 @@ Bis auf rechnend werden die Prozesse je Zustand in Listen verwaltet
 * **blockiert**: Prozess wartet auf Ereignis (z.B. E/A)
 * **beendet**: Ausführungsende erreicht
 
-```mermaid
-graph LR;
-  Start-->|1|erzeugt;
-  erzeugt-->|2|bereit;
-  bereit-->|3|rechnend;
-  rechnend-->|4|bereit;  
-  rechnend-->|5|blockiert;
-  blockiert-->|6|bereit;  
-  rechnend-->|7|beendet;  
-  beendet-->|8|Ende;  
-```
+<img src="img/Uebergang.png" width="500">
+
 
 ## 2.5 Bei einem Einprozessorsystem läuft zu jedem Zeitpunkt genau ein Prozess. Warum laufen die Prozesse trotzdem scheinbar parallel?
 

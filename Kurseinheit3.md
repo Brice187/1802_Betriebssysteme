@@ -44,7 +44,7 @@ Bei MVT gibt es bei der Auswahl eines freien Segments Verfahren: First Fit, Next
     * Fixe Segmentgrößen im Speicher
     * unmöglich, günstige Segmentgrößen zu finden, da die benötigten Größen i.d.R. nicht vorher
     abgeschätzt werden können  
-    * Scheduling-Strategie: einem Auftrag das kleinste zur Verfügung stehende Segment zugewiesen, also kein unnötig großes (best-available-fit)
+    * Scheduling-Strategie: einem Auftrag das kleinste zur Verfügung stehende Segment zugewiesen, also kein unnötig großes (best-available-fit). Trotzdem kommt es zu interner Fragmentierung
 
 <img src="img/MFT.png" width="500">
 
@@ -59,52 +59,101 @@ Das BS belegt im Arbeitsspeicher die Adressen von *0* bis *a* Byte. Ein Anwender
 
 ## 3.7 Was ist eine interne Fragmentierung? Was ist eine externe Fragmentierung?
 
+* **Interne Fragmentierung**: Entsteht dadurch, dass einem Prozess ein größerer Speicherbereich zugewiesen wird, als benötigt wird.
+* **Externe Fragmentierung**: Bedeutet, dass nicht zugewiesene Speicherbereiche zu klein sind, um die Speicherplatzanforderungen von auf Ausführung wartenden Prozessen zu erfüllen.
+
 ### 3.7.1 Welche Fragmentierung haben die Speicherzuweisungsstrategien MFT, MVT, Bude, Paging?
 
+Bei MFT tritt vorwiegend interne Fragmentierung auf, bei MVT externe. Bei Paging gibt es nur interne Fragmentierung.
+
 ## 3.8 Was ist Paging?
+
+Der logische Hauptspeicher wird in Einheiten einer bestimmten Größe unterteilt -> **Page/Seite**
 
 ### 3.8.1 Was ist der Unterschied zwischen einer Seite und einem Segment?
 
 ### 3.8.2 Wie sieht eine logische Adresse bei paging aus?
 
+Die logische Adresse wird in eine Seitennummer und einen Offset geteilt:
+Eine Seite habe **p** Speicherzellen, die logische Adresse **v** liegt dann in Seite **s** und Offset **d** wobei
+`s = v div p` und `d = v mod p`
+
+Beispiel:
+
+Seitengröße (p) = 5
+logische Adresse (v) = 16
+=>
+Seitennummer (s) = 16/5 = **3**
+Offset (d) = 16 *mod* 5 = **1**
+
 ### 3.8.3 Wie wird eine logische Adresse bei paging auf eine physische Adresse abgebildet?
-(Die Seitentabelle macht genau diese Abbildung)
+
+Der physische Speicher ist unterteilt - hier nennt man die einzelnen Stücke page frame (Seitenrahmen). Ein Seitenrahmen kann genau eine Seite des logischen Hauptspeichers aufnehmen. In der **Seitentabelle** ist vermerkt, in welchem Seitenrahmen welche Seite steht.
+
+<img src="img/seitentabelle.png" width="500">
 
 ### 3.8.4 Wer führt diese Abbildung durch?
-(MMU, siehe Abbildung 3.15 im Kurstext)
+
+<img src="img/MMU.png" width="500">
 
 ### 3.8.5 Was ist MMU? Warum ermöglicht der MMU, dass ein Prozess nur die logischen Adressen zu kennen braucht?
 
 In der MMU (Memory Management Unit) werden logische Adressen in physische Adressen umgeformt. Physisch ist die MMU entweder in der CPU integriert oder nahe angeordnet, logisch gesehen liegt sie zwischen CPU und Hauptspeicher.
 
 ### 3.8.6 Wie kann eine Seite individuell geschützt werden?
-(Protection-Bit)
 
-### 3.9 Was ist Shared Memory? Wie funktioniert sie?
+Es ist nun möglich, jede Seite individuell zu schützen. Wenn z.B. Programme und Daten auf verschiedenen Seiten stehen, kann das Programm gegen Schreiben geschützt werden und auf den Daten schreiben erlaubt werden. Hierzu enthält die Seitentabelle ein Protection-Bit (Schutzbit), welches durch die Hardware bei jedem Zugriff geprüft wird. Es können drei Bits benutzt werden, jeweils eines für Leserecht, Schreibrecht und Ausführungsrecht.
 
-### 3.9.1 Was ist der Vorteil?
+### 3.9 Was ist Shared Memory? Wie funktioniert sie? Was ist der Vorteil?
+
+Gemeinsam von mehreren Prozessen genutzter virtueller Hauptspeicher:
+
+Wenn ein Prozess auf eine Seite des Shared Memory schreibt, erscheint der modifizierte Inhalt auch im Hauptspeicher des anderen Prozesses. Dies ist eine effiziente Art, Daten zwischen Prozessen auszutauschen, weil die Daten im physischen Hauptspeicher nicht mehr kopiert werden müssen.
 
 ### 3.9.2 Welche Probleme können entstehen, wenn mehr als ein Prozess eine Shared Memory modifiziert?
+
 (Inkonsistenz, Inkorrekt)
 
 ### 3.9.3 Was muss gemacht werden, damit diese Probleme vermeiden werden können?
+
 Synchronisierung der Prozesse)
 
 ## 3.10 Wie oft wird der Hauptspeicher mindestens bei paging zugegriffen, wenn ein Wort im Hauptspeicher geholt wird?
 
+* **TLB hit**: Es gibt nur einen Zugriff auf den Hauptspeicher.
+* **TLB miss** Es gibt zwei Zugriffe auf den Hauptspeicher (unter der Annahme, dass wir eine einstufige Seitentabelle haben. Bei mehrstufigen Seitentabellen entsprechend mehr).
+
 ## 3.11 Wie kann der Zugriff eines Worts im Hauptspeicher bei paging mit TLB beschleunigt werden?
 
+Die komplette Seitentabelle wird im physischen Hauptspeicher abgelegt. Hieraus werden die aktuell benutzten Einträge in einem schnellen Assoziativspeicher **TLB(Translation Lookaside Buffer)** abgelegt.
+
+Diese enthalten etwa 8 – 16 Einträge. Wenn im TLB eine gesuchte Seitennummer vorhanden ist (**TLB hit**), wird die zugehörige Seitenrahmennummer ausgegeben. Dieser Vorgang ist etwa 10mal schneller als ein Hauptspeicher-Zugriff.
+Wenn die gesuchte Seitennummer nicht vorhanden ist **TLB miss**, wird die zugehörige Seitenrahmennummer aus der Seitentabelle geholt und in die TLB eingetragen. Hierbei muss i.d.R. ein schon vorhandener Eintrag verdrängt werden.
+
 ## 3.12 Wie kann man die Seitentabelle verwalten, wenn sie zu groﬂ ist?
-(mehr stufige Seitentabelle)
+
+Eine Seitentabelle darf so lang sein, wie eine Seite. Sollte man eine größere Tabelle benötigten, bietet sich eine mehrstufigen Seitentabellen an.
+
+Diese Seitentabellen werden nicht nur im realen Speicher, sondern auch im virtuellen Speicher abgelegt (Ein Teil liegt im realen Speicher, ein Teil im virtuellen Speicher) -> Seitentabellen unterliegen dem Paging. So muss nicht mehr die gesamte Seitentabelle im physischen Speicher gehalten werden. Insbesondere Tabellen, die gerade nicht gebraucht werden, sollten nicht im Speicher liegen.
+
+Bei einem zweistufigen Seitentabellen-Verfahren gibt es eine erste Stufe, bei der jeder Eintrag die Adresse oder Seitenrahmennummer einer Seitentabelle der zweiten Stufe enthält.
+
+<img src="img/seitentabelle2.png" width="500">
 
 ## 3.13 Was ist die Idee (das Ziel) des virtuellen Speichers?
-(Schreiben eines Programms ohne Einschränkung der Gröﬂe des Hauptspeichers, Zerlegung von Programmen, nur der Teil im Hauptspeicher bleibt, der gerade gebraucht wird. Die Trennung zwischen logischen und physischen Adressen und die Unterstützung von MMU machen Programme verschiebbar und die Realisierung des Konzepts möglich. Virtueller Hauptspeicher unterstützt die Unabhängigkeit der Software von der Hardware.  Die Lokalitätseigenschaft unterstützt die Effizienz. Das Betriebssystem realisiert das virtuelle Konzept, so dass es transparent für Benutzer und Benutzerprozesse ist. )
+
+Schreiben eines Programms ohne Einschränkung der Gröﬂe des Hauptspeichers, Zerlegung von Programmen, nur der Teil im Hauptspeicher bleibt, der gerade gebraucht wird.
+Die Trennung zwischen logischen und physischen Adressen und die Unterstützung von MMU machen Programme verschiebbar und die Realisierung des Konzepts möglich. Virtueller Hauptspeicher unterstützt die Unabhängigkeit der Software von der Hardware.  Die Lokalitätseigenschaft unterstützt die Effizienz. Das Betriebssystem realisiert das virtuelle Konzept, so dass es transparent für Benutzer und Benutzerprozesse ist. )
 
 ## 3.14 Was ermöglicht die Realisierung des Konzepts des virtuellen Speichers?
+
 (Prozesse arbeiten nur mit logischen Adressen, die physischen Adressen werden erst zur Ausführungszeit mit Hilfe von Hardware MMU abgebildet--> Relokierbarkeit, paging-Technik, Seitentabelle-->Anwesenheit einer Seite, Auslagerungsbereich im Sekundärspeicher.)
 
 ## 3.15 Was wird gebraucht, um das virtuelle Hauptspeicher-Konzept mit paging zu realisieren?
-(Seitentabelle, Swap-bereich)
+
+"Für jeden logischen Hauptspeicher brauchen wir also Platz auf einem Hintergrund-Speicher (i.A. einer Festplatte), dem sog. Swap-Bereich, der beim Start des BS reserviert wird."
+
+Weiterhin brauchen wir eine Seitentabelle.
 
 ## 3.15.1 Wie sieht eine virtuelle Adresse aus?
 
@@ -113,9 +162,14 @@ Synchronisierung der Prozesse)
 
 ## 3.16 Was muss das Betriebssystem bei der Erzeugung eines Prozesses tun, wenn das virtuelle Hauptspeicher-Konzept mit paging realisiert wird?
 
-## 3.17 Was ist ein Seitenfehler?
+Bei der Erzeugung eines Prozesses wird ein Speicherplatz für Programmsegment, Datensegment, Stacksegment und Prozesskontrollblock im Hauptspeicher reserviert. Bei Paging verteilt sich diese Speicherreservierung auf physischen und virtuellen Speicher.
 
-### 3.17.1 Was passiert bei einem Seitenfehler?
+Bei der Erzeugung eines Prozesses muss man folglich eine Seitentabelle im Hauptspeicher initialisieren und einen Swap-Bereich im Sekundärspeicher reservieren.
+
+## 3.17 Was ist ein Seitenfehler(page fault)? Was passiert bei einem Seitenfehler?
+
+Eine Seite befindet sich beim versuchten Zugriff nicht im Hauptspeicher. Die Abarbeitung des Befehls wird zunächst einmal abgebrochen und eine Unterbrechung wird ausgelöst. Nun wird die Seite vom Hintergrundspeicher in einen freien Seitenrahmen eingelagert.
+Da dies u.U. dauert, wird ein Prozesswechsel durchgeführt, falls ein anderer Prozess ausführungsbereit ist. Schließlich wird der unterbrochene Prozess fortgesetzt und der abgebrochene Befehl erneut ausgeführt, diesmal ohne Seitenfehler.
 
 ### 3.17.2 Wie wird ein Seitenfehler erkannt?
 
@@ -124,16 +178,61 @@ Synchronisierung der Prozesse)
 ## 3.18 Welche Ladestrategien gibt es?  
 (d.h. wann soll eine Seite in den Hauptspeicher geholt werden?)
 
-### 3.18.1 Was heiﬂt demand paging? Was heiﬂt prepaging?
+### 3.18.1 Was heißt demand paging? Was heißt prepaging?
 
-## 3.19 Was heiﬂt Lokalität eines Prozesses?
+* **demand paging**: Seiten werden immer erst bei Bedarf eingelagert werden, nie auf Vorrat.
+* **prepaging**: Seiten eingelagert, die aktuell noch nicht, vermutlich aber in Zukunft benötigt werden. Das prepaging erweist sich wegen des Verdrängens schon vorhandener Seiten normalerweise als nachteilig und wird nur in Ausnahmefällen angewandt.
+
+## 3.19 Was heißt Lokalität eines Prozesses?
+
+Unter der Lokalität des Zugriffsverhaltens von Prozessen verstehen wir, dass überwiegend hintereinander stehende Instruktionen oder Schleifen, die nur wenige Seiten umfassen, ausgeführt werden und selten zu weiter entfernt liegenden Programmteilen gesprungen wird. Es ist daher möglich, nur einen Teil des gesamten Programms im physischen Hauptspeicher zu halten.
 
 ## 3.20 Was ist die Speichereinblendung von Datei?
 
+Der Prozess sieht dann im virtuellen Hauptspeicher die Daten, die in der Datei stehen. Verändert er diese Daten, verändert er implizit auch den Inhalt der Datei.
+
+Dies ist eine Alternative zum klassischen E/A-Verfahren.
+
 ## 3.21 Welche Seitenauslagerungsstrategien gibt es?
+
+* **FIFO**
+  * First-In-First-Out
+  * leicht implementierbar
+  * deutlich höhere Seitenfehlerrate
+  * Nachteil: FIFO lagert auch laufend intensiv genutzte Seiten aus.
+* **Second Chance**
+  * FIFO-Erweiterung
+  * Ausgabepuffer
+  * Seiten werden nicht sofort ausgelagert
+  * ineffizient
+* **Clock-Algorithmus**
+  * andere Implementierung von Second-Chance
+  * Schlange wird durch zirkuläre Liste erreicht
+  * Seite eingelagert: R-Bit = 0
+  * Seite benutzt: R-Bit = 1
+  * Auslagerung geschieht wie folgt: Zeiger findet Seite mit R-Bit=1 => R-Bit=0. Zeiger findet Seite mit R-Bit=0 => Auslagerung
+* **LRU**
+  * Least Recently Used
+  * eigentlich eine sehr gute Strategie
+  * Problem: effiziente Implementierung
+  * ohne aufwändige Hardware-Unterstützung nicht implementierbar.
+* **Zugriffsbit**
+  * Idee ist ähnlich wie LRU, doch man merkt sich nicht den exakten Zeitpunkt, sondern eine Beobachtungsperiode.
+  * Realisierung über Zugriffsbit (Referenced-Bit; kurz: R-Bit)
 
 ### 3.21.1 Welche Seitenrahmenzuweisungsstrategien gibt es?
 
 ### 3.21.2 Wie viele Seitenrahmen sollten einem Prozess zugewiesen werden?
 
-## 3.22 Was ist Seitenflattern?
+Es gibt keine feste Zuweisung, da die Zuweisung etwas dynamisches ist.
+
+Zu Beginn keine Zahl festgelegt werden, wie viele Seitenrahmen ein Prozess bekommen sollte. Es gibt hierfür jedoch zwei Strategien:
+
+1. Die **Arbeitsmengenstrategie** besteht darin, einem Prozess zu einem bestimmten Zeitpunkt so viel Seitenrahmen zuzuweisen, wie dessen aktuelle Arbeitsmenge groß ist. Bei jedem Seitenfehler wird einem Prozess ein weiterer Seitenrahmen zugewiesen.
+2. **Kontrolle der Seitenfehlerrate**: Wenn ein Seitenfehler auftritt, registriert das BS die Zeit t, die seit dem letzten von diesem Prozess verursachten Seitenfehler vergangen ist. Man legt einen Grenzwert T fest. Wenn t <= T, wird dem Prozess noch eine Seite mehr zugeteilt.
+
+## 3.22 Was ist Seitenflattern(Trashing)?
+
+Systemüberlastung, welche dann auftritt, wenn die Summe der Arbeitsmengen aller aktiven Prozesse größer als der verfügbare physische Hauptspeicher ist. Dieselben Seiten werden nun immer wieder ersetzt und neu eingelagert.
+
+Trashing vermeiden: jedem Prozess so viele Seiten zuordnen, wie er mind. benötigt oder bei Überlastung die Zahl der aktiven Prozesse verringern, indem z.B. Prozesse mit geringer Priorität vorübergehend stillgelegt werden.
