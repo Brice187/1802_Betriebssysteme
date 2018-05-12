@@ -2,6 +2,12 @@
 
 ## 4.1 Was sind Race Conditions?
 
+Wenn *zwei (oder mehr)* überlappende Prozesse gemeinsam auf Speicher zugreifen (mindestens einer schreibend) und das Ergebnis abhängig von der Ausführungsreihenfolge der Anweisungen ist, dann handelt es sich um eine **Race Condition**.
+
+Beispiel: Schreibender Prozess inkrementiert gemeinsame Variable, zweiter Prozess liest (nicht zeitlich deterministisch) diese Variable. Es kann vor der Inkrementierung **oder** danach passieren!
+
+Die kritischen Abschnitte der beiden Prozesse müssen dann synchronisiert werden
+
 ## 4.1.1 Was ist ein kritischer Abschnitt eines Prozesses?
 
 Kritische Abschnitte sind Abschnitte, die lesend und/oder schreibend gemeinsame Daten verarbeiten, die von mehreren konkurrierenden Prozessen genutzt werden. Damit kritische Abschnitte determinierte Resultate zur Folge haben, müssen solche Abschnitte ohne Störung durch die konkurrierenden Prozesse in einer Sequenz ausgeführt werden.

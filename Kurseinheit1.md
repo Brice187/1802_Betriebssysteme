@@ -2,7 +2,7 @@
 
 ## 1.1 Was ist ein Betriebssystem?
 
-Ein Betriebssystem ist eine Menge von Programmen, die es ermöglichen, den Rechner zu betreiben und Anwendungsprogramme auf ihm auszuführen. Es schliesst die semantische Lücke zwischen Hardware und Applikation, indem von der Komplextät der Hardware abstrahiert wird.
+Ein Betriebssystem ist eine Menge von Programmen, die es ermöglichen, den Rechner zu betreiben und Anwendungsprogramme auf ihm auszuführen. Es schliesst die semantische Lücke zwischen Hardware und Applikation, indem von der Komplexität der Hardware abstrahiert wird.
 
 ## 1.1.1 Welche Aufgaben hat ein Betriebssystem?
 
@@ -79,22 +79,29 @@ Jede Ebene kann ausgetauscht werden, solange die Schnittstellen weiterhin die vo
     * Operationen zur Hauptspeicherverwaltung
     * E/A-Operationen
     * Setzen/Abfragen von Systemparametern
-    * allg. Zustandabfragen (Systemuhr, aktive Prozesse...)
+    * allg. Zustandsabfragen (Systemuhr, aktive Prozesse...)
 * **Assemblerebene**: Maschinenprogramme werden in einer für Menschen besser lesbaren Form dargestellt.
-* **Höhere Programmiersprachen**: Unabhängig von konkreten Prozessoren und Betriebssytemen, der Compiler ist das Bindglied zwischen Quellcode und CPU/OS. Spezifisch sind Funktionen wie
+* **Höhere Programmiersprachen**: Unabhängig von konkreten Prozessoren und Betriebssytemen, der Compiler ist das Bindeglied zwischen Quellcode und CPU/OS. Spezifisch sind Funktionen wie
     * E/A werden meist in Bibliotheken realisiert, so dass eine Portierung auf eine andere Plattform nur eine geringe Hürde ist.
     * Parallelität: Müssen durch Laufzeitsystem der Sprache oder OS unterstützt werden. Im OS ist es meist unpraktikabel, da der Aufwand zum erzeugen/synchronisieren (neuer Adressraum etc.) von Prozessen sehr hoch(**schwergewichtig**).
     * Trend geht zu *leichtgewichtigen* Prozessen (Threads)
 
 ## 1.3 Wie kann ein Betriebssystem die Kontrolle über das System behalten?
 
-
+Das Betriebssysteme erhält die Kontrolle vom System durch Unterbrechungen, welche durch Anwendungen oder E/A-Geräte ausgelöst werden.
 
 ### 1.3.1 Ein Betriebssystem funktioniert dank des Unterbrechungsmechanismus. Welche Zwecke hat die Unterbrechung?
 
-
+Eine Unterbrechung pausiert die Ausführung des aktuell laufenden Prozesses um einen privilegierten Befehl auszuführen.
 
 ### 1.3.2 Welche Aufgaben des Betriebssystems können durch Unterbrechungen gelöst werden?
+
+Alle Aufgaben, welche in einer Unterbrechungsroutine beschrieben werden können, z.B.:
+
+* Kommunikation mit E/A-Geräten
+* Realisierung von Systemaufrufen
+* Realisierung von Zeitscheiben (*Zeitgeber benötigt*)
+* Behandlung von Programmfehlern
 
 ### 1.3.3 Welche Unterbrechungen gibt es? Wodurch werden sie ausgelöst?
 
@@ -141,6 +148,7 @@ Sobald Signal am Unterbrechungseingang vorliegt:
 1. Start Unterbrechungsbehandlung
 2. Welches Gerät hat Interrupt gesendet
 3. Bestätigung Interrupt an Gerät
+4. Jedes Gerät/Unterbrechungstyp hat eine Unterbrechungsnummer(im Signal enthalten)
 
 ### 1.4.5 Was ist der Unterbrechungsvektor?
 
@@ -178,7 +186,7 @@ Es werden mehrere Programme in den Benutzerbereich des Hauptspeichers geladen, w
 
 ### 1.6.1 Wie viele Prozesse können wirklich parallel bei Einprozessor- und Multiprozessorsystemen laufen?
 
-Pro CPU läuft ein Prozess
+Pro CPU läuft ein Prozess 
 
 ### 1.6.2 Warum hat man das Gefühl, dass die Prozesse sogar bei einem Einprozessorsystem quasi-parallel laufen?
 
@@ -191,7 +199,7 @@ Mit Hilfe eines supervisor call (**SVC**; auch Trap genannt) wird eine Unterbrec
 ### 1.7.1 Was ist der Unterschied zwischen dem Systemmodus und dem Benutzermodus?
 
 * **Kernel Mode**: Alle Maschinenbefehle sind erlaubt, es gibt keine Speicherschutzmechanismen. Nur im *Systemmodus* erlaubte Befehle nennt man "privilegierte Befehle"
-* **User Mode**: Nur normale, sicherheitsunkritsche Befehle erlaubt
+* **User Mode**: Nur normale, sicherheitsunkritische Befehle erlaubt
 
 ## 1.8 Wie wird ein Betriebssystem geladen?
 
@@ -239,5 +247,5 @@ Zentrale Fragestellungen:
 #### Teilhaberbetrieb
 
 * Mehrere Benutzer arbeiten über eigenes Terminal an genau einem Prozess
-* Beispiel: transkationsorientiere Systeme wie Flugbuchungen, POS, ATM (typische Basis sind DBMS)
+* Beispiel: transaktionsorientierte Systeme wie Flugbuchungen, POS, ATM (typische Basis sind DBMS)
 * einzelnes Programm wird parallel über mehrere Schnittstellen bedient

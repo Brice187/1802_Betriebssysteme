@@ -36,8 +36,6 @@ Alle Daten, die das Betriebssystem über einen Prozess verwalten muss:
 * Informationen über geöffnete Dateien
 * Abrechnungs- und Statistikinformationen
 
-### 2.3.1 Welche Informationen werden in welcher Datenstruktur (PCB) gespeichert?
-
 ## 2.4 Welche Zustände hat ein Prozess? Welche Übergänge gibt es?
 
 Bis auf rechnend werden die Prozesse je Zustand in Listen verwaltet
@@ -48,21 +46,27 @@ Bis auf rechnend werden die Prozesse je Zustand in Listen verwaltet
 * **blockiert**: Prozess wartet auf Ereignis (z.B. E/A)
 * **beendet**: Ausführungsende erreicht
 
-![Uebergangsdiagramm](img/Uebergang.png)
+![Prozesszustandsübergangsdiagramm](img/Uebergang.png)
 
 ## 2.5 Bei einem Einprozessorsystem läuft zu jedem Zeitpunkt genau ein Prozess. Warum laufen die Prozesse trotzdem scheinbar parallel?
 
-
+Abhängig von der Scheduling-Strategie findet für den Benutzer ein nahezu unbemerkbar schneller Wechsel zwischen den Prozessen statt. Dadurch kommen (die interaktiven) Prozesse ungefähr gleich viel CPU-Zeit pro Zeitabschnitt und der Anwender hat den Eindruck einer parallelen Ausführung der Prozesse.
 
 ### 2.5.1 Wie kann einem Prozess der Prozessor entzogen werden? Welche Hardware übernimmt diese Aufgabe, damit das Betriebssystem die Kontrolle wieder zurück erhält?
 
+Bei präemptiven Systemen startet ein Timer (Hardware) zu Beginn jedes rechnenden Prozesses. Nach Ablauf einer bestimmten Zeitscheibe (z. B. 100 ms) erzeugt der Timer eine Unterbrechung (Interrupt) und das Betriebssystem erhält die Kontrolle zurück.
+
 ## 2.6 Was macht der Scheduler?
+
+Der Scheduler legt fest, welcher Prozess als nächster den Prozessor erhalten soll.
 
 ### 2.6.1 Wer entscheidet, welcher Prozess vom Zustand bereit in den Zustand rechnend geht?
 
 Der Scheduler entscheidet, welcher Prozess vom Zustand bereit zum Zustand rechnend geht, d.h. die Reihenfolge der Prozesse in der Warteschlange realisiert (präsentiert) genau die Scheduling-Strategie, die der Scheduler gewählt hat.
 
 ### 2.6.2 Warum geht ein Prozess vom Zustand rechnend zum Zustand bereit?
+
+Ein Prozess, welcher aktuell rechnet, aber dessen Zeitscheibe abgelaufen ist, geht in den Zustand bereit über. Dies passiert so lange, bis entweder die Abarbeitung des Programms fertig ist oder auf ein E/A-Vorgang gewartet wird (der Prozess also blockiert).
 
 ## 2.7 Wer ist für das Umschalten des Prozessors zwischen Prozessen zuständig?
 
@@ -82,7 +86,16 @@ Bei heute üblichen Systemen schaltet das BS den Prozessor mehrmals pro Sekunde
 
 ## 2.8 Wann findet eine Prozessumschaltung statt?
 
+* Ein Prozess will einen **Systemaufruf** durchführen
+* **Timerinterrupt**
+* **Abarbeitung des Programms** abgeschlossen
+* Unterbrechung durch **Ein-/Ausgabegerät**
+* rechnender Prozess hat Fehler (**Trap**)
+* Prozess greift auf Speicherseite zu, die nicht im Hauptspeicher ist (**Seitenfehler**)
+
 ### 2.8.1 Was ist die Beziehung zwischen Prozesswechsel und Moduswechsel?
+
+Damit ein Prozesswechsel statt finden kann, muss die CPU vorher aus dem Benutzermodus in den Systemmodus wechseln, da die *interrupt service routines* nur durch privilegierte Befehle aufgerufen werden können. Einem Prozesswechsel geht also immer ein Moduswechsel voraus.
 
 ## 2.9 Was heiﬂt nicht-präemptiv? Was heiﬂt präemptiv?
 
@@ -97,15 +110,17 @@ Bei heute üblichen Systemen schaltet das BS den Prozessor mehrmals pro Sekunde
 * Maximaler Durchsatz
 * Fairness, also gerechte Verteilung des Prozessors.
 
-### 2.10.1 Können sie gleichzeitig erfüllt werden?
+### 2.10.1 Können sie gleichzeitig erfüllt werden? Welche Konflikte gibt es zwischen den Qualitätsmerkmalen?
 
-Nein, da Strategien teilweise inkompatibel: Langes, heftiges Numbercrunching lastet den Prozessor voll aus, leichtgewichtiger Texteditor kommt erst na langer Wartezeit zum Zug (=Fairness verletzt).
+Nein, da Strategien teilweise inkompatibel: Langes, heftiges Numbercrunching lastet den Prozessor voll aus, leichtgewichtiger Texteditor kommt erst nach langer Wartezeit zum Zug (=Fairness verletzt).
 
-### 2.10.2 Welche Konflikte gibt es zwischen den Qualitätsmerkmalen?
+### 2.10.2 Was ist mit Fairness gemeint?
 
-### 2.10.3 Was ist mit Fairness gemeint?
+Die gerechte Verteilung des Prozessors innerhalb eines Zeitabschnitts.
 
 ## 2.11 Welche Scheduling-Strategien mit Vor- und Nachteilen sind geeignet für ein Batchbetrieb?
+
+
 
 ## 2.12 Welche Scheduling-Strategien mit Vor- und Nachteilen sind geeignet für ein nicht-kooperativen (präemptiv) interaktiver Betrieb?
 
@@ -121,7 +136,35 @@ Für jede Klasse ist ein eigener Scheduler zuständig. Gesamtscheduling so ein
 
 ## 2.13 Beschreiben Sie die einzelnen Scheduling-Strategien mit Vor- und Nachteilen.
 
-## 2.14 Welche theoretische Eigenschaft hat die SJF-Strategie? Was ist die Nachteile von SJF?
+### 2.13.1 Scheduling für nicht-präemptive Systeme
+
+* **First Come First Served (FCFS)**: Prozesse werden nach Eingangsreihenfolge vom Prozessor bearbeitet.
+    * **Vorteile**:
+        * einfach zu implementieren (FIFO-Queue)
+        * Zeitbedarf für Einfügen + Entfernen konstant
+        * Fairness, da alle Prozesse der Reihe nach den Prozessor erhalten.
+    * **Nachteile**
+        * kurz laufende Prozesse müssen u. U. sehr lange warten, daher für Dialogsysteme nicht geeignet.
+* **Shortest Job First (SJF)**: Der Prozess mit der kürzesten Bedienzeit bekommt den Prozessor zuzuordnen (bei gleicher Zeit: FCFS).
+    * **Vorteile**:
+        * Garantiert die minimale Wartezeit für eine feste Menge von Prozessen mit bekannten Bedienzeiten
+        * Kurz laufende Prozesse werden nicht benachteiligt
+        * Algorithmus ist relativ leicht zu implementieren, falls die Dauer des nächsten CPU bursts bekannt ist.
+    * **Nachteile**
+        * Langläufer müssen eventuell ewig warten.
+        * Die Dauer des nächsten CPU bursts ist nicht bekannt und kann nur geraten bzw. geschätzt werden.
+        * größerer Verwaltungsaufwand O(log n).
+
+* **2.5.2.3 Priority Scheduling**: Prozesse werden in unterschiedlich wichtige Klassen einteilt. Zuerst bekommen die Prozesse der wichtigsten Klasse den Prozessor zugeteilt, dann erst die der weniger wichtigen Klassen.
+    * Prioritäten können dabei **intern** (z. B. vom Hauptspeicherbedarf, Plattenspeicherbedarf, der Anzahl der geöffneten Dateien, der bisher verbrauchten Rechenzeit usw.) oder **extern** (Benutzer) vergeben werden.
+    * *Statische* Priorität bedeutet, dass jeder Prozess eine Priorität zugeordnet bekommt und und diese bis zu seinem Ende behält. Prozesse mit niedriger Priorität müssen u.U. ewig warten
+    * **Vorteile**
+        * Wichtige Aufgaben werden schnell erledigt.
+    * **Nachteile**
+        * Bei statischer Prioritätsvergabe nicht fair, da Prozesse dann verhungern können.
+        * Wie die Prioritäten festgelegt werden sollen, ist nicht so ohne weiteres klar.
+
+## 2.14 Welche theoretische Eigenschaft hat die SJF-Strategie? Was sind die Nachteile von SJF?
 (starvation, Wissen der CPU bursts)
 
 ### 2.14.1 Wie kann man CPU bursts abschätzen?  

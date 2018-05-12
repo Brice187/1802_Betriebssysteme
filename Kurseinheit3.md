@@ -17,10 +17,6 @@
 
 Eine **physische Adresse** ist eine reale Adresse einer Speicherzelle in einem Hauptspeicher. Über die physische Adresse kann jede Speicherzelle einzeln adressiert werden.
 
-
-
-
-
 ## 3.3 Was ist der Unterschied zwischen absoluten und relativen Adressen?
 
 Lader möchte Programm laden und dafür sorgen muss, dass die im geladenen Programm auftretenden Adressen im logischen Adressraum des Prozesses liegen. Hierzu gibt es zwei Möglichkeiten:
@@ -46,7 +42,7 @@ Bei MVT gibt es bei der Auswahl eines freien Segments Verfahren: First Fit, Next
     abgeschätzt werden können  
     * Scheduling-Strategie: einem Auftrag das kleinste zur Verfügung stehende Segment zugewiesen, also kein unnötig großes (best-available-fit). Trotzdem kommt es zu interner Fragmentierung
 
-![MFT](img/MFT.png)
+![MFT: Der Speicher wird in vier Segmente von 100, 200, 200 und 500 KB aufgeteilt, interne Fragmentierung tritt auf.](img/MFT.png)
 
 ## 3.6 Ein Programm mit logischen Adressen wird zur Ausführung in den Hauptspeicher geladen. Welche Hardware-Unterstützung braucht man, um den Zugriff einer physischen Adresse des Programms zu realisieren?
 
@@ -91,11 +87,11 @@ Offset (d) = 16 *mod* 5 = **1**
 
 Der physische Speicher ist unterteilt - hier nennt man die einzelnen Stücke page frame (Seitenrahmen). Ein Seitenrahmen kann genau eine Seite des logischen Hauptspeichers aufnehmen. In der **Seitentabelle** ist vermerkt, in welchem Seitenrahmen welche Seite steht.
 
-![Seitentabelle](img/seitentabelle.png)
+![Ein Beispiel für die Zuordnung von logischen zu physischen Speicherseiten.](img/seitentabelle.png)
 
 ### 3.8.4 Wer führt diese Abbildung durch?
 
-![MMU](img/MMU.png)
+![Die Umsetzung von virtuellen in physische Adressen durch die MMU bei der seitenorientierten Speicherverwaltung.](img/MMU.png)
 
 ### 3.8.5 Was ist MMU? Warum ermöglicht der MMU, dass ein Prozess nur die logischen Adressen zu kennen braucht?
 
@@ -139,7 +135,7 @@ Diese Seitentabellen werden nicht nur im realen Speicher, sondern auch im virtue
 
 Bei einem zweistufigen Seitentabellen-Verfahren gibt es eine erste Stufe, bei der jeder Eintrag die Adresse oder Seitenrahmennummer einer Seitentabelle der zweiten Stufe enthält.
 
-![Seitentabelle2](img/seitentabelle2.png)
+![Zweistufige Seitentabellen](img/seitentabelle2.png)
 
 ## 3.13 Was ist die Idee (das Ziel) des virtuellen Speichers?
 
@@ -196,32 +192,35 @@ Dies ist eine Alternative zum klassischen E/A-Verfahren.
 
 ## 3.21 Welche Seitenauslagerungsstrategien gibt es?
 
-* **FIFO**
-  * First-In-First-Out
-  * leicht implementierbar
-  * deutlich höhere Seitenfehlerrate
-  * Nachteil: FIFO lagert auch laufend intensiv genutzte Seiten aus.
+* **FIFO**(First-In-First-Out)
+    - leicht implementierbar
+    - deutlich höhere Seitenfehlerrate
+    - Nachteil: FIFO lagert auch laufend intensiv genutzte Seiten aus.
 * **Second Chance**
-  * FIFO-Erweiterung
-  * Ausgabepuffer
-  * Seiten werden nicht sofort ausgelagert
-  * ineffizient
+    - FIFO-Erweiterung
+    - Ausgabepuffer
+    - Seiten werden nicht sofort ausgelagert
+    - ineffizient
 * **Clock-Algorithmus**
-  * andere Implementierung von Second-Chance
-  * Schlange wird durch zirkuläre Liste erreicht
-  * Seite eingelagert: R-Bit = 0
-  * Seite benutzt: R-Bit = 1
-  * Auslagerung geschieht wie folgt: Zeiger findet Seite mit R-Bit=1 => R-Bit=0. Zeiger findet Seite mit R-Bit=0 => Auslagerung
-* **LRU**
-  * Least Recently Used
-  * eigentlich eine sehr gute Strategie
-  * Problem: effiziente Implementierung
-  * ohne aufwändige Hardware-Unterstützung nicht implementierbar.
+    - andere Implementierung von Second-Chance
+    - Schlange wird durch zirkuläre Liste erreicht
+    - Seite eingelagert: R-Bit = 0
+    - Seite benutzt: R-Bit = 1
+    - Auslagerung geschieht wie folgt: Zeiger findet Seite mit R-Bit=1 => R-Bit=0. Zeiger findet Seite mit R-Bit=0 => Auslagerung
+* **LRU**(Least Recently Used)
+    - eigentlich eine sehr gute Strategie
+    - Problem: effiziente Implementierung
+    - ohne aufwändige Hardware-Unterstützung nicht implementierbar
 * **Zugriffsbit**
-  * Idee ist ähnlich wie LRU, doch man merkt sich nicht den exakten Zeitpunkt, sondern eine Beobachtungsperiode.
-  * Realisierung über Zugriffsbit (Referenced-Bit; kurz: R-Bit)
+    - Idee ist ähnlich wie LRU, doch man merkt sich nicht den exakten Zeitpunkt, sondern eine Beobachtungsperiode.
+    - Realisierung über Zugriffsbit (Referenced-Bit; kurz: R-Bit)
 
 ### 3.21.1 Welche Seitenrahmenzuweisungsstrategien gibt es?
+
+* einfache Strategie: die vorhandenen Seitenrahmen gleichmäßig auf die im System vorhandenen Prozesse verteilen (schlechte Strategie)
+* Bessere Strategien berücksichtigen:
+    - Das Zugriffsverhalten jedes einzelnen Prozesses (*lokale Kriterien*)
+    - Gesamtbelastung des Rechnersystems (*globale Kriterien*)
 
 ### 3.21.2 Wie viele Seitenrahmen sollten einem Prozess zugewiesen werden?
 

@@ -28,7 +28,7 @@ Dafür benötigt `make` eine Beschreibung der Abhängigkeiten zwischen den Da
 
 Diese Angaben werden in einer Datei `Makefile` abgelegt. `make` prüft das Modifikationsdatum jeder Datei, ermittelt damit, welche Dateien geändert wurden, leitet aus den im `Makefile` beschriebenen Abhängigkeiten die notwendigen Aktionen ab und führt sie aus. Das heißt, dass das letzte Veränderungsdatum in den Attributen einer Datei eine wichtige Rolle bei `make` spielt.
 
-![makefile](img/makefile.png)
+![Funktionsprinzip des Kommandos `make`](img/makefile.png)
 
 ### 7.5.6 Wie wird entschieden, welche abhängigen Dateien neu übersetzt werden müssen?
 
