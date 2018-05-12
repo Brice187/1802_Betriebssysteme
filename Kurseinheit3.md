@@ -46,7 +46,7 @@ Bei MVT gibt es bei der Auswahl eines freien Segments Verfahren: First Fit, Next
     abgeschätzt werden können  
     * Scheduling-Strategie: einem Auftrag das kleinste zur Verfügung stehende Segment zugewiesen, also kein unnötig großes (best-available-fit). Trotzdem kommt es zu interner Fragmentierung
 
-<img src="img/MFT.png" width="500">
+![MFT](img/MFT.png)
 
 ## 3.6 Ein Programm mit logischen Adressen wird zur Ausführung in den Hauptspeicher geladen. Welche Hardware-Unterstützung braucht man, um den Zugriff einer physischen Adresse des Programms zu realisieren?
 
@@ -76,6 +76,7 @@ Der logische Hauptspeicher wird in Einheiten einer bestimmten Größe unterteil
 
 Die logische Adresse wird in eine Seitennummer und einen Offset geteilt:
 Eine Seite habe **p** Speicherzellen, die logische Adresse **v** liegt dann in Seite **s** und Offset **d** wobei
+
 `s = v div p` und `d = v mod p`
 
 Beispiel:
@@ -90,11 +91,11 @@ Offset (d) = 16 *mod* 5 = **1**
 
 Der physische Speicher ist unterteilt - hier nennt man die einzelnen Stücke page frame (Seitenrahmen). Ein Seitenrahmen kann genau eine Seite des logischen Hauptspeichers aufnehmen. In der **Seitentabelle** ist vermerkt, in welchem Seitenrahmen welche Seite steht.
 
-<img src="img/seitentabelle.png" width="500">
+![Seitentabelle](img/seitentabelle.png)
 
 ### 3.8.4 Wer führt diese Abbildung durch?
 
-<img src="img/MMU.png" width="500">
+![MMU](img/MMU.png)
 
 ### 3.8.5 Was ist MMU? Warum ermöglicht der MMU, dass ein Prozess nur die logischen Adressen zu kennen braucht?
 
@@ -138,7 +139,7 @@ Diese Seitentabellen werden nicht nur im realen Speicher, sondern auch im virtue
 
 Bei einem zweistufigen Seitentabellen-Verfahren gibt es eine erste Stufe, bei der jeder Eintrag die Adresse oder Seitenrahmennummer einer Seitentabelle der zweiten Stufe enthält.
 
-<img src="img/seitentabelle2.png" width="500">
+![Seitentabelle2](img/seitentabelle2.png)
 
 ## 3.13 Was ist die Idee (das Ziel) des virtuellen Speichers?
 

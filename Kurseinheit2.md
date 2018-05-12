@@ -48,8 +48,7 @@ Bis auf rechnend werden die Prozesse je Zustand in Listen verwaltet
 * **blockiert**: Prozess wartet auf Ereignis (z.B. E/A)
 * **beendet**: Ausführungsende erreicht
 
-<img src="img/Uebergang.png" width="500">
-
+![Uebergangsdiagramm](img/Uebergang.png)
 
 ## 2.5 Bei einem Einprozessorsystem läuft zu jedem Zeitpunkt genau ein Prozess. Warum laufen die Prozesse trotzdem scheinbar parallel?
 

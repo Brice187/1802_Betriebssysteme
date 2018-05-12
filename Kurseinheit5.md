@@ -79,7 +79,7 @@ Eine FAT hat für jeden Block auf der Festplatte einen Eintrag.)
 
 ### 5.17.6 Was sind die doppelt und dreifach indirekten Sektoradressen?
 
-### 5.17.7 Wie groﬂ kann eine Datei sein, die mit i-node verwaltet wird?
+### 5.17.7 Wie groß kann eine Datei sein, die mit i-node verwaltet wird?
 (10+X+X^2+X^3, Was ist das X? 
 Wie kann man das X berechnen? Wie groﬂ kann das X sein? 
 man sollte unbedingt die Abbildung 5.15 zeichnen und erklären können.)
@@ -102,7 +102,3 @@ man sollte unbedingt die Abbildung 5.15 zeichnen und erklären können.)
 
 ## 5.21 Wie werden bei UNIX die Zugriffsrechte einer Datei realisiert?
 (Siehe Schutzbits in Kurseinheit 6)
-
-
-Viele Grüﬂe
-Lihong Ma  
