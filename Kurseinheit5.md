@@ -189,37 +189,54 @@ Dezentral für jede Datei wird eine eigene **Sektoradresstabelle** auf dem Seku
 
 Zu jeder Datei existiert ein sogenannter i-node (Index-Node); das ist eine Tabelle, die Angaben über die Datei enthält. Im Hauptspeicher werden nur die i-nodes der aktuell geöffneten Da- teien gehalten, dies benötigt sehr wenig Platz
 
-![Ein i-node für eine Datei sowie deren Indexblöcke- und Da- tenblöcke unter UNIX](img/inode.png)
+![Ein i-node für eine Datei sowie deren Indexblöcke- und Datenblöcke unter UNIX](img/inode.png)
 
 ### 5.18.1 Wo steht der Name der Datei unter UNIX
 
 Im Verzeichnis der Datei ist ein Eintrag mit dem Dateinamen und die Nummer des i-nodes dieser Datei
 
-### 5.18.2 Welche Attribute gibt es im i-node
+### 5.18.2 Wie groß ist ein i-node bei UNIX
 
-### 5.18.3 Wie groﬂ ist ein i-node bei UNIX
-(64 Byte relativ klein)
+Bei dem Dateisystem ext2 beträgt die Größe eines Inodes standardmäßig 128 Byte
 
 ### 5.18.4 Was steht genau in der 10 direkten Sektoradressen
-(Was zeigt eine direkte Sektoradresse?)
+
+Die Einträge 0 bis 9 der Sektoradresstabelle zeigen auf die Adressen der ersten 10 Seiten der Datei
 
 ### 5.18.5 Was zeigt eine indirekte Sektoradresse
-(sie zeigt genau auf eine Adresse eines Blocks, in dem genau $X$ Adressen stehen.)
+
+Der hier angegebene Indexblock enthält `x` direkte Sektoradressen, entsprechend den Einträgen 10 bis 9 + `x` der Sektoradresstabelle
 
 ### 5.18.6 Was sind die doppelt und dreifach indirekten Sektoradressen
 
+In der **doppelt** indirekten Sektoradresse ist ein Indexblock, welcher `x` indirekte Sektoradressen enthält, entsprechend den Einträgen 10 + `x` bis 9 + `x` + `x^2` der Sektoradresstabelle.
+
+In der **dreifach** indirekten Sektoradresse ist ein Indexblock, welcher `x` doppelt indirekte Sektoradressen enthält, entsprechend den Einträgen 10 + `x` + `x^2` bis 9 + `x` + `x^2` + `x^3`  der Sektoradresstabelle.
+
 ### 5.18.7 Wie groß kann eine Datei sein, die mit i-node verwaltet wird
-(10+X+X^2+X^3, Was ist das X?
-Wie kann man das X berechnen? Wie groﬂ kann das X sein?
-man sollte unbedingt die Abbildung 5.15 zeichnen und erklären können.)
 
-### 5.18.8 Wie viele Zugriffe auf die Indexblöcke bei i-node werden maximal benötigt
+Die Sektoradresstabelle einer Datei ist also in 4 Abschnitte der Länge 10, x, x2 und x3 aufgeteilt, z. B. bei x = 256 mit den Längen 10, 256, 65.536 und 16.777.216. Sektoradresstabellen mit mehr als 10 + x + x2 + x3 Einträgen, die bei unserem Beispielwerten einer Datei von rund 16 GByte entsprechen, sind nicht möglich.
 
-### 5.18.9 Wie kann eine Datei unter UNIX mit Hilfe der i-nodes gefunden werden
+## 5.18.8 Wie kann man das X berechnen? Wie groß kann das X sein?
+
+1 KByte große Blöcken
+4 Byte lange Sektoradressen
+
+x = 1024 Byte / 4 Byte = 256
+
+### 5.18.9 Wie viele Zugriffe auf die Indexblöcke bei i-node werden maximal benötigt
+
+### 5.18.10 Wie kann eine Datei unter UNIX mit Hilfe der i-nodes gefunden werden
+
+Beobachten wir nun einmal, wie das Dateisystem z.B. die Datei `/home/meier/myprogram` in der bekannten Abbildung findet
+
+Der i-node des Wurzelverzeichnisses ist immer im Hauptspeicher. Im Wurzelverzeichnis findet das System den Dateinamen `home` und dessen i-node-Nummer. Dieser i-node muss aus dem i-node-Bereich gelesen werden und dann der Inhalt des Verzeichnisses `home`. Hierin wiederum wird der Eintrag `meier` gesucht, dessen i-node gelesen und dann der Inhalt dieses Verzeichnisses. Schließlich wird darin der Eintrag `myprogram` gesucht, und über dessen i-node kann nun endlich auf den Dateiinhalt zugegriffen werden.
 
 ## 5.19 Wie sieht ein klassisches UNIX-Dateisystem aus
 
 ## 5.20 Wie funktioniert das Sektorfolgen-Verfahren zur Verwaltung der Sektoren einer Datei
+
+Beim Sektorfolgen will man gegenüber Sektoradresstabellen zwei Verbesserungen gleichzeitig erreichen: Der Platzbedarf für Indexblöcke wird reduziert und Plattenarmbewegungen werden vermieden. Dieses soll erreicht werden, indem die zu einer Datei gehörenden Blöcke möglichst hintereinander auf einer Spur bzw. einem Zylinder der Festplatte angeordnet sind (vgl. Interleaving). Bei großen Platten, die nicht allzu voll sind, können erfahrungsgemäß fast alle kleinen bis mittelgroßen Dateien in 1 oder 2 Sektorfolgen untergebracht werden, die Länge der Sektorfolgen liegt typischerweise im Bereich von 5 bis 20.
 
 ### 5.20.1 Wie funktioniert das NTFS-Dateisystem
 
@@ -230,4 +247,5 @@ man sollte unbedingt die Abbildung 5.15 zeichnen und erklären können.)
 ### 5.21.1 Wie funktionieren sie und welche Vor- und Nachteile haben sie
 
 ## 5.22 Wie werden bei UNIX die Zugriffsrechte einer Datei realisiert
+
 (Siehe Schutzbits in Kurseinheit 6)
