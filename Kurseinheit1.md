@@ -119,6 +119,8 @@ Alle Aufgaben, welche in einer Unterbrechungsroutine beschrieben werden können,
 
 ### 1.3.4 Gibt es Unterschiede bei der Behandlung von Unterbrechungen?
 
+Die Unterschiede sind in der Tabelle
+
 | Trap           | Interrupt            |
 |----------------|----------------------|
 | synchron       | asynchron            |
@@ -186,7 +188,7 @@ Es werden mehrere Programme in den Benutzerbereich des Hauptspeichers geladen, w
 
 ### 1.6.1 Wie viele Prozesse können wirklich parallel bei Einprozessor- und Multiprozessorsystemen laufen?
 
-Pro CPU läuft ein Prozess 
+Pro CPU läuft ein Prozess
 
 ### 1.6.2 Warum hat man das Gefühl, dass die Prozesse sogar bei einem Einprozessorsystem quasi-parallel laufen?
 
@@ -217,7 +219,7 @@ Zentrale Fragestellungen:
 2. wie werden Ein- und Ausgaben bei der Programmausführung verarbeitet
 3. mit welcher Priorität werden Ressourcen zugeteilt
 
-#### Interaktiver Betrieb
+### Interaktiver Betrieb
 
 * hohe Priorität
 * Es werden geeignete Ein- und Ausgabegeräte (Monitor + Tastatur/Maus) benötigt
@@ -226,25 +228,25 @@ Zentrale Fragestellungen:
 * Betriebssystem muss für möglichst niedrige Antwortzeit sorgen
 * schlechte Ressourcenausnutzung
 
-#### Stapelbetrieb
+### Stapelbetrieb
 
 * mehrere, iterative Aufträge werden durch Kommandoprozedur nacheinander verarbeitet
 * Der Nutzer hat i.d.R. keinen Kontakt mehr zum Rechner
 * Für Stapelausführung geeignet sind Programme mit zeitunkritischen, umfangreichen Datenmengen/ Rechenoperationen
 * sehr gute Ressourcenausnutzung
 
-#### Hintergrundausführung
+### Hintergrundausführung
 
 * Programm wird interaktiv gestartet und dann im Hintergrund ausgeführt
 * z.B. Bei Fenster-Systemen (Programm nicht im Fokus, es wird trotzdem gerechnet)
 
-#### Realzeitbetrieb
+### Realzeitbetrieb
 
 * Anwendung muss in harten Zeitgrenzen antworten, nicht rechtzeitige Ergebnisse werden verworfen bzw. überschrieben
 * Betriebssystem soll zeitkritische Ausführung nicht verzögern
 * Gängige Betriebssysteme sind ungeeignet, da diese mit Unterbrechungen arbeiten und somit zeitlich nicht genau vorhersagbar sind
 
-#### Teilhaberbetrieb
+### Teilhaberbetrieb
 
 * Mehrere Benutzer arbeiten über eigenes Terminal an genau einem Prozess
 * Beispiel: transaktionsorientierte Systeme wie Flugbuchungen, POS, ATM (typische Basis sind DBMS)
