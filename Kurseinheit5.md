@@ -85,84 +85,149 @@ Spooling: Drucker sind langsam und werden von vielen benutzt, müssen aber pro A
 
 Allgemein: Versucht ein Prozess, ein Gerät zu belegen, das nicht frei ist, blockiert er und wird in eine Warteschlange gelegt. Wenn das Gerät wieder frei ist, darf der erste Prozess in der Warteschlange es belegen und erhält den Zugriff
 
-## 5.7 Wie wird eine E/A-Operation durchgeführt
+## 5.7 Warum muss ein Benutzerprozess das Betriebssystem beauftragen, eine E/A-Operation auszuführen
 
-### 5.7.1 Warum muss ein Benutzerprozess das Betriebssystem beauftragen, eine E/A-Operation auszuführen
+Für E/A-Operation ist der Kernel-Mode zuständig.
 
-## 5.8 Welche Aufgaben haben der E/A-Teil des Betriebssystems, der Gerätetreiber, der Interrupt-Handler und Controller bei einer z.B. read()-Operation? Wie arbeiten sie zusammen
+## 5.8 Welche Aufgaben haben der E/A-Teil des Betriebssystems, der Gerätetreiber, der Interrupt-Handler und Controller bei einer z.B. read()-Operation? Wie arbeiten sie zusammen? Wie wird eine E/A-Operation durchgeführt
+
+![Die Aufgaben der geräteunabhängigen E/A-Software, des Gerätetreibers, des Interrupt-Handlers und des Controllers bei einem E/A-Zyklus](img/eaop.png)
 
 ## 5.9 Welche Ziele hat der E/A-Softwareentwurf
 
+* Verwaltung der Geräte
+* Abwicklung der E/A-Systemaufrufe
+* Schnittstelle zu den Benutzerprogrammen soll folgende Eigenschaften aufweisen:
+    * **Geräteunabhängigkeit von Applikationen**: Definition von virtuellen Gerätetypen mit spezifizierten Schnittstellen (z.B. virtueller Typ *Datenträger*)
+    * **Einheitliche Namen**: Applikationen haben keine Bezeichnungen für Geräte (explizit oder implizit). Die Dateien bzw. Geräte werden als Parameter eingebunden
+    * **Kodierungsunabhängigkeit**: Applikation in UTF-8, Übersetzungen von und nach gerätespezifischen Codierungen müssen automatisch vorgenommen werden (z.B. im Treiber)
+    * **Wechselseitiger Ausschluss**
+    * **Fehlerbehandlung**: Sollten möglichst Hardware-nah behandelt werden (z.B. Übertragungsfehler wird direkt im Festplattencontroller fehlerkorrigiert)
+
 ## 5.10 Wie ist eine Festplatte aufgebaut
+
+![Aufbau einer Magnetplatte](img/aufbauhdd.png)
 
 ### 5.10.1 Welche Fähigkeit hat eine Festplatte ohne Dateisystem
 
+Das Betriebssystem kann (über den Controller) einzelne Sektoren der Platte lesen oder schreiben. (Der Festplatte ist es egal, ob ein FS installiert ist oder nicht)
+
 ## 5.11 Wie wird die Zugriffszeit auf eine Festplatte definiert
 
-### 5.11.1 Welche Maﬂnahmen im Betriebssystem und im Controller können die Suchzeit, die Latenzzeit und die Übertragungszeit verkürzen oder einsparen
+* **Suchzeit**: Die Lese-/Schreibköpfe werden auf die gesuchte Spur positioniert. Die Zeit für eine konkrete Positionierung hängt von der zu überwindenden Distanz ab
+* **Latenzzeit**: Es wird gewartet, bis sich die Platte soweit weitergedreht hat, dass der gesuchte Sektor bei den Köpfen erscheint. (Abhängig von Rotationsgeschwindigkeit)
+* **Übertragungszeit**: Während der Kopf über den Sektor gleitet, werden die gelesenen bzw. geschriebenen Daten vom bzw. zum Controller übertragen
 
-## 5.12 Wie funktionieren die Strategien SSTF und SCAN
+**Zugriffszeit:** *Suchzeit + Latenzzeit + Übertragungszeit*
 
-### 5.12.1 Welche Vorteile und Nachteile haben die Strategien
+### 5.11.1 Welche Maßnahmen im Betriebssystem und im Controller können die Suchzeit, die Latenzzeit und die Übertragungszeit verkürzen oder einsparen
 
-### 5.12.2 Was ist das Interleaving und der Interleaving-Faktor
+* Verwaltung von Warteschlangen der Übertragungsaufträge (SSTF und SCAN)
+* Interleaving
+* Puffer
 
-## 5.13 Wazu ist ein Dateisystem gut? Was ist ein Dateisystem? Was ist ein hierarchisches Dateisystem
+## 5.12 Wie funktionieren die Strategien SSTF und SCAN? Welche Vorteile und Nachteile haben die Strategien
 
-## 5.14 Welche Verfahren gibt es, um die Sektoren einer Datei zu verwalten
+### shortest-seek-time-first (SSTF)
 
-## 5.15 Was ist eine FAT beim MS-DOS Betriebssystem
+Die Suchzeit ist linear zu der überbrückenden Distanz des Lese-/Schreibkopfs. Daher sollten Aufträge in Zylindern, die der aktuellen Position der Köpfe nahe liegen, bevorzugt werden. Als jeweils nächster sollte also derjenige Übertragungsauftrag ausgeführt werden, bei dem die kleinste Suchzeit auftritt
 
-### 5.15.1 Wie groﬂ ist eine FAT
-(Man sollte nicht sagen, dass eine FAT so groﬂ wie die Anzahl der Dateien ist, die auf einer Festplatte gespeichert werden.
-Eine FAT hat für jeden Block auf der Festplatte einen Eintrag.)
+Vorteil: Schnelle mittlere Suchzeit
+Nachteil: Starvation möglich
 
-### 5.15.2 Wie werden die Sektoren einer Datei mit einer FAT verwaltet
-(Man sollte die Abbildung 5.14 zeichnen können.)
+### Fahrstuhlalgorithmus (SCAN)
 
-### 5.15.3 Wie kann ein Block einer Datei in FAT gefunden werden
+Die Köpfe wandern immer abwechselnd nach außen und innen, solange in der jeweiligen Richtung Aufträge vorliegen.
 
-### 5.15.4 Welche Vor- und Nachteile hat die FAT? Was kann die FAT gut unterstützen
+Vorteil: Die mittlere Ausführungszeit eines Übertragungsauftrags incl. der Wartezeit bis zum Beginn der Ausführung ist kürzer.
+Nachteil: Die mittlere Suchzeit ist bei SCAN  höher
 
-## 5.16 Was ist eine Sektoradresstabelle
+## 5.13 Was ist das Interleaving und der Interleaving-Faktor
 
-## 5.17 Was ist die Idee bei i-nodes? Was ist ein i-node unter UNIX? Was steht in einem i-node
+Problem: Beim Lesen wird der 1. Block in den Puffer des Controllers übertragen. Von dort muss er über den Bus zum Hauptspeicher übertragen werden. Wenn die hierfür benötigte Zeit deutlich länger als die Zeit ist, in der der Lese-/Schreibkopf die Lücke zwischen zwei Sektoren überquert, dann befindet sich der Kopf schon über oder hinter dem 2. Sektor.
 
-### 5.17.1 Wo steht der Name de Datei unter UNIX
+Deswegen überspringt man beim Schreiben jeweils einen oder mehrere Sektoren. Wieviele Sektoren übersprungen werden sollen, hängt vom Rechner ab; diese Anzahl, die man **interleave factor** nennt, muss beim Formatieren der Platte festgelegt werden
 
-### 5.17.2 Welche Attribute gibt es im i-node
+## 5.14 Wozu ist ein Dateisystem gut? Was ist ein Dateisystem? Was ist ein hierarchisches Dateisystem
 
-### 5.17.3 Wie groﬂ ist ein i-node bei UNIX
+Ein Dateisystem ist eine Menge von Dateien und Verzeichnissen, die incl. der erforderlichen Hilfsdaten auf einem physischen oder logischen Datenträger ge- speichert sind. Ein Dateisystem soll die **Transparenz** schaffen, dass dem Besitzer der Dateien die Details der physikalischen Datenspeicherung verborgen bleiben.
+
+*hierarchisches Dateisystem* = verschachtelte Verzeichnisse
+
+![Ein Ausschnitt aus einer Verzeichnisstruktur unter UNIX](img/folder.png)
+
+## 5.15 Welche Verfahren gibt es, um die Sektoren einer Datei zu verwalten
+
+Um den Inhalt einer Datei den Sektoren einer Platte zuordnen zu können, wird er in Seiten aufgeteilt. Eine Datei entspricht somit einer Folge von Seiten.
+
+## 5.16 Was ist eine FAT beim MS-DOS Betriebssystem
+
+Eine *file allocation table* (**FAT**) ist eine zentrale Datenstruktur, die Informationen über alle Dateien eines Dateisystems sowie über die freien Blöcke enthält. (MS-DOS und Windows-Betriebssystemen)
+
+### 5.16.1 Wie groß ist eine FAT
+
+Die FAT wird in einem oder mehreren fest vereinbarten Sektoren z. B. am Anfang einer Partition der Platte gespeichert. Bei Starten des Betriebssystems wird sie in einen Puffer im Hauptspeicher übertragen und bleibt dort permanent. Eine FAT hat für jeden Block auf der Festplatte einen Eintrag.
+
+### 5.16.2 Wie werden die Sektoren einer Datei mit einer FAT verwaltet
+
+![File allocation table](img/fat.png)
+
+### 5.16.3 Wie kann ein Block einer Datei in FAT gefunden werden
+
+Sequentielles Verarbeiten in einer linearen Liste.
+
+### 5.16.4 Welche Vor- und Nachteile hat die FAT? Was kann die FAT gut unterstützen
+
+Vorteil: Sequentielles Verarbeiten einer Datei wird durch die FAT sehr gut unterstützt
+Nachteil: Die gesamte FAT Tabelle muss sich zu jeder Laufzeit des Rechners im Hauptspeicher befinden.
+
+## 5.17 Was ist eine Sektoradresstabelle
+
+Dezentral für jede Datei wird eine eigene **Sektoradresstabelle** auf dem Sekundärspeicher gehalten, die alle Adressen von Sektoren speichert, die Seiten dieser Datei enthalten. (*File-Control-Block*).
+
+## 5.18 Was ist die Idee bei i-nodes? Was ist ein i-node unter UNIX? Was steht in einem i-node
+
+Zu jeder Datei existiert ein sogenannter i-node (Index-Node); das ist eine Tabelle, die Angaben über die Datei enthält. Im Hauptspeicher werden nur die i-nodes der aktuell geöffneten Da- teien gehalten, dies benötigt sehr wenig Platz
+
+![Ein i-node für eine Datei sowie deren Indexblöcke- und Da- tenblöcke unter UNIX](img/inode.png)
+
+### 5.18.1 Wo steht der Name der Datei unter UNIX
+
+Im Verzeichnis der Datei ist ein Eintrag mit dem Dateinamen und die Nummer des i-nodes dieser Datei
+
+### 5.18.2 Welche Attribute gibt es im i-node
+
+### 5.18.3 Wie groﬂ ist ein i-node bei UNIX
 (64 Byte relativ klein)
 
-### 5.17.4 Was steht genau in der 10 direkten Sektoradressen
+### 5.18.4 Was steht genau in der 10 direkten Sektoradressen
 (Was zeigt eine direkte Sektoradresse?)
 
-### 5.17.5 Was zeigt eine indirekte Sektoradresse
+### 5.18.5 Was zeigt eine indirekte Sektoradresse
 (sie zeigt genau auf eine Adresse eines Blocks, in dem genau $X$ Adressen stehen.)
 
-### 5.17.6 Was sind die doppelt und dreifach indirekten Sektoradressen
+### 5.18.6 Was sind die doppelt und dreifach indirekten Sektoradressen
 
-### 5.17.7 Wie groß kann eine Datei sein, die mit i-node verwaltet wird
+### 5.18.7 Wie groß kann eine Datei sein, die mit i-node verwaltet wird
 (10+X+X^2+X^3, Was ist das X?
 Wie kann man das X berechnen? Wie groﬂ kann das X sein?
 man sollte unbedingt die Abbildung 5.15 zeichnen und erklären können.)
 
-### 5.17.8 Wie viele Zugriffe auf die Indexblöcke bei i-node werden maximal benötigt
+### 5.18.8 Wie viele Zugriffe auf die Indexblöcke bei i-node werden maximal benötigt
 
-### 5.17.9 Wie kann eine Datei unter UNIX mit Hilfe der i-nodes gefunden werden
+### 5.18.9 Wie kann eine Datei unter UNIX mit Hilfe der i-nodes gefunden werden
 
-## 5.18 Wie sieht ein klassisches UNIX-Dateisystem aus
+## 5.19 Wie sieht ein klassisches UNIX-Dateisystem aus
 
-## 5.19 Wie funktioniert das Sektorfolgen-Verfahren zur Verwaltung der Sektoren einer Datei
+## 5.20 Wie funktioniert das Sektorfolgen-Verfahren zur Verwaltung der Sektoren einer Datei
 
-### 5.19.1 Wie funktioniert das NTFS-Dateisystem
+### 5.20.1 Wie funktioniert das NTFS-Dateisystem
 
-### 5.19.2 Was bedeutet ein Jounaling-Dateisystem
+### 5.20.2 Was bedeutet ein Jounaling-Dateisystem
 
-## 5.20 Welche Verfahren gibt es, um die freien Sektoren zu verwalten
+## 5.21 Welche Verfahren gibt es, um die freien Sektoren zu verwalten
 
-### 5.20.1 Wie funktionieren sie und welche Vor- und Nachteile haben sie
+### 5.21.1 Wie funktionieren sie und welche Vor- und Nachteile haben sie
 
-## 5.21 Wie werden bei UNIX die Zugriffsrechte einer Datei realisiert
+## 5.22 Wie werden bei UNIX die Zugriffsrechte einer Datei realisiert
 (Siehe Schutzbits in Kurseinheit 6)
