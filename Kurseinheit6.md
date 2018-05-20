@@ -4,19 +4,41 @@
 
 * **Vertraulichkeit**: Daten dürfen nur von Personen gelesen werden, die hierzu befugt sind
 * **Integrität**: Unversehrtheit und Korrektheit von Daten
-* **Verfügbarkeit:** Alle Programme und das BS müssen stets verfügbar sein => Gefahr z.B. durch
-denial-of-service-Angriff
-* **Schutz vor finanziellem Verlust**: Rechner wird von Personen benutzt, die hierfür nicht
-zugelassen sind und die Kosten nicht tragen
+* **Verfügbarkeit:** Alle Programme und das BS müssen stets verfügbar sein => Gefahr z.B. durch denial-of-service-Angriff
+* **Schutz vor finanziellem Verlust**: Rechner wird von Personen benutzt, die hierfür nicht zugelassen sind und die Kosten nicht tragen
 * **Schutz vor Missbrauch**:  kriminellen Handlungen (Botnet / Spam etc.)
 
 ## 6.2 Was sind der Unterschied zwischen dem persistenten und transienten Rechtezustand
 
+* **persistent**: der Systemabschaltungen überdauernde Zustand eines Rechners. Der persistente Rechtezustand macht direkt oder indirekt Aussagen darüber, welche Subjekte auf welchen Objekten welche Operationen ggf. mit welchen Parametern ausführen dürfen oder nicht ausführen dürfen. Man erkennt sofort, dass nur solche Subjekte und Objekte im Rahmen des persistenten Rechtezustands Sinn machen, die ebenfalls persistent sind; Prozesse sind z. B. keine persistenten Subjekte. In vielen Systemen sind nur Dateien persistente Objekte (Linux: alles ist eine Datei)
+
+![Ein Funktionsschema für Zugriffskontrollen, die Kästen stellen Funktionsbereiche oder Systemzustände dar, nicht unbedingt Moduln](img/persistent.png)
+
+* **transient**: Nachdem im Rahmen der Rechteprüfung einem Prozess ein bestimmter Zugriff erlaubt wurde, ist es sehr häufig praktisch, dies als Entstehung eines neuen transienten Rechts aufzufassen, bei dem der Prozess Subjekt ist. Ein Prozess ist in diesem Sinne ein transientes Subjekt, das bei Beendigung des Prozesses oder bei einem Systemstillstand automatisch verschwindet.
+
 ### 6.2.1 Kann man Beispiele angeben
+
+Beim Öffnen einer Datei werden die Rechte der aktiven Subjekte auf Basis des persistenten Rechtezustands überprüft. Wenn ausreichende Rechte vorhanden sind, wird die Datei im gewünschten Modus geöffnet; hierbei wird intern ein Dateikontrollblock angelegt, in dem u. a. die erlaubten Zugriffsmodi vermerkt sind.
+
+Nachdem die Datei einmal geöffnet ist, werden bei jedem einzelnen Lesen eines Zeichens oder Satzes die Rechte nur noch auf Basis der Daten im Dateikontrollblock geprüft, nicht mehr auf Basis des persistenten Rechtezustands
 
 ## 6.3 Was versteht man unter Subjekten und Objekten
 
+**Objekte** sind alle, auf das mittels Zugriffskontrolle zugegriffen werden kann:
+
+* normale und ausführbare Dateien
+* Verzeichnisse bzw. ganze Bäume von Verzeichnissen
+* Bänder, Disketten oder andere Medien,
+* Schnittstellen, Uhren, Seiten, Datenstrukten
+
+Jedes Objekt hat einen eindeutigen Namen, über den es referenziert wird und eine endliche Menge von Operationen, die von Prozessen auf diesem Objekt ausgeführt werden können. Z. B. für eine Datei sind die Operationen **read** und **write** sinnvoll; bei einem Semaphor sind **down** und **up** sinnvoll.
+
+**Subjekte** sind Einheiten, die auf Objekte zugreifen können. Sie können Benutzer, Prozesse, Schnittstellen usw. sein.
+
 ## 6.4 Was ist der Unterschied zwischen Identifikation und Authentisierung
+
+* **Identifikation**: Dem Benutzer wird nach dessen Identifizierung eine initiale Arbeitsumgebung zur Verfügung gestellt
+* **Authentisierung**: Die Kenntnis eines Benutzernamens ist i. A. kein hinreichender Beweis dafür, dass die von einem Benutzer angegebene Identität mit seiner tatsächlichen übereinstimmt. Im Rahmen der login-Prozedur kann daher die Vorlage zusätzlicher Beweise (z.B. Passwort) für die Echtheit der angegebenen Benutzeridentität verlangt werden.
 
 ## 6.5 Was ist das SETUID-Bit
 
@@ -46,20 +68,23 @@ Eine ACL ist ein Record, wobei jeder Eintrag für jeden zu einer Domäne geho�
 Es gibt ferner die "benannten ACLs": Man kann ACLs als eigenständige Einheit auffassen, ihnen einen Namen geben und mehreren Objekten die gleiche benannte ACL zuweisen.
 
 ## 6.8.1 Was ist der Vorteil
+
 (Ein Benutzer kann die Zugriffsrechte selbst vergeben)
+
 * bei ACL **allgemein**: Default-Wert ist "verboten", d.h. alles erlaubte muss explizit erlaubt sein
 * bei **benannten ACLs**: Wenn mehrere Objekte die gleiche ACL haben, spart man Platz
-* Der Besitzer einer Datei kann bei ACLs selbst festlegen kann, wer und welche Zugriffsrechte
-auf eine Datei hat.
+* Der Besitzer einer Datei kann bei ACLs selbst festlegen kann, wer und welche Zugriffsrechte auf eine Datei hat.
 
 ## 6.9 Wie sehen die Schutzbits bei UNIX aus
 
 Bei Schutzbits werden zu jeder Datei drei Gruppen zu je drei Bits angegeben. Zu jeder Gruppe
+
 1. Datei-Eigentümer
 2. Gruppe (Eigentümer muss nicht unbedingt Mitglied in der Gruppe sein)
 3. Sonstige
 
 legt jeweils ein Bit fest, ob Leserecht, Schreibrecht oder Ausführungsrecht erteilt ist.
+
 Bsp. `rwxrw-r--`
 
 ### 6.9.1 Wie werden die Rechte einer Datei für einen Benutzer ausgewertet
@@ -86,7 +111,17 @@ Jetzt werden die Rechte des Prozesses (Subjektes) auf die Datei im Betriebssyste
 
 ## 6.12 Was ist die Schwäche diskretionärer Zugriffskontrollen
 
-## 6.13 Was ist die Idee der Informationskontrollen
+Nur der Zugriff zu Datenbehältern wird kontrolliert, nicht hingegen zu der darin enthaltenen Information.
+
+Ein Benutzer, welcher das Recht hat, eine Datei zu lesen, kann den Inhalt in einer neuen Datei speichern und diese z.B. der **Welt** zugänglich machen. Subjekte können ihre Rechte also missbrauchen.
+
+## 6.13 Was ist die Idee der Informationsflusskontrollen
+
+**mandatory access controls**: Diese Modelle wurden in erster Linie aufgrund von Anforderungen im Bereich militärischer oder geheimdienstlicher Anwendungen entwickelt. *Nur* für diese Modelle lässt sich mit Hilfe mathematischer Theorien beweisen, dass sie die zunächst informell definierten Sicherheitssziele Vertraulichkeit und Integrität von Information realisieren
+
+Die zentrale Idee ist, Zugriffsbeschränkungen der von einem Prozess gelesenen Daten auf die erzeugten Daten zu **vererben**.
+
+Wenn ein Prozess eine Datei D1 zum Lesen geöffnet hat und später eine Datei D2 zum Schreiben, dann gilt bereits alle Information als von D1 nach D2 übertragen, selbst wenn der Prozess überhaupt keine Daten direkt oder in verarbeiteter Form von D1 nach D2 kopiert hat.
 
 ### 6.13.1 Wie kann man mit dem Bell-La Padula-Modell das Sicherheitsziel der Vertraulichkeit realisieren
 

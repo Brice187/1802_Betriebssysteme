@@ -33,3 +33,7 @@ Diese Angaben werden in einer Datei `Makefile` abgelegt. `make` prüft das Modi
 ### 7.5.6 Wie wird entschieden, welche abhängigen Dateien neu übersetzt werden müssen
 
 ### 7.6 wie funktioniert der Systemaufruf fork()
+
+Der Systemaufruf fork() erzeugt eine exakte Kopie des aufrufenden Prozesses - inkl. Program Counter. Die Prozesse unterscheiden sich nur anhand des Rückgabewerts von `fork`
+
+![Funktionsprinzip des Kommandos `fork`](img/fork.png)
