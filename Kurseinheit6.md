@@ -121,8 +121,30 @@ Ein Benutzer, welcher das Recht hat, eine Datei zu lesen, kann den Inhalt in ein
 
 Die zentrale Idee ist, Zugriffsbeschränkungen der von einem Prozess gelesenen Daten auf die erzeugten Daten zu **vererben**.
 
-Wenn ein Prozess eine Datei D1 zum Lesen geöffnet hat und später eine Datei D2 zum Schreiben, dann gilt bereits alle Information als von D1 nach D2 übertragen, selbst wenn der Prozess überhaupt keine Daten direkt oder in verarbeiteter Form von D1 nach D2 kopiert hat.
+Wenn ein Prozess eine Datei *D1* zum Lesen geöffnet hat und später eine Datei *D2* zum Schreiben, **dann gilt bereits alle Information als von D1 nach D2 übertragen, selbst wenn der Prozess überhaupt keine Daten direkt oder in verarbeiteter Form von D1 nach D2 kopiert hat**.
 
 ### 6.13.1 Wie kann man mit dem Bell-La Padula-Modell das Sicherheitsziel der Vertraulichkeit realisieren
 
+Jedem Objekt und jedem Subjekt im Computersystem wird eine Vertraulichkeitsklasse *in Form einer ganzen Zahl* durch das System zugeordnet. Je größer die Vertraulichkeitsklasse desto geheimer ist ein Objekt bzw. desto vertrauenswürdiger ist ein Subjekt. Also ist jedes Subjekt berechtigt, Daten seiner eigenen und kleinerer Vertraulichkeitsklassen zu lesen, höhere aber nicht.
+
+Zugriffsregeln:
+
+* **einfache Geheimhaltungsbedingung**: Ein Prozess darf nur Objekte lesen, die keiner höheren Klasse angehören als der Prozess selbst.
+* **Die \*-Eigenschaft**: Ein Prozess darf nur in Objekte schreiben, die keiner niedrigeren Klasse angehören als der Prozess.
+
+![Multilevel-Sicherheit. Ein durchgezogener Pfeil von einem Objekt auf einen Prozess bedeutet, dass der Prozess das Objekt lesen darf. Ein gestrichelter Pfeil von einem Prozess auf ein Objekt bedeutet, dass der Prozess in das Objekt schreiben darf. Die Pfeilrichtung gibt also immer an, wohin die Information fließt. Die Zugriffsregeln werden genau dann eingehalten, wenn kein Pfeil nach unten zeigt.](img/padula.png)
+
+Ohne die \*-Eigenschaft könnte ein Prozess den Inhalt eines geheimen Objekts in ein offeneres Objekt kopieren und so die geheimen Daten unberechtigten (niedriger klssifizierten) Subjekten zugänglich machen
+
+**Ruhe-Prinzip**: Ein Prozess kann die Klasse eines Objekts nicht verändern.
+
+**Kommunikationsregel**: Sofern Prozesse miteinander kommunizieren können, darf ein Prozess *P1* nur dann einem Prozess *P2* Daten senden, wenn die Vertraulichkeitsklasse von P1 nicht höher als die von P2 ist
+
 ### 6.13.2 Wie kann man mit dem Biba-Modell die Integrität erreichen
+
+Hier wird jedem Objekt und jedem Subjekt – zusätzlich zu der Vertraulichkeitsklasse nach Bell-La Padula – auch noch eine Integritätsklasse zugeordnet, und die Zugriffsregeln für Integrität sind in gewisser Weise dual zu den Regeln für Vertraulichkeit
+
+* **einfache Integritätsbedingung**: Ein Prozess darf nur Objekte lesen, die keiner niedrigeren Klasse angehören als der Prozess selbst.
+* **Die \*-Eigenschaft der Integrität**: Ein Prozess darf nur in Objekte schreiben, die keiner höheren Klasse angehören als der Prozess.
+
+Mit diesen Eigenschaften kann also, um im militärischen Beispiel zu bleiben, ein Leutnant den Befehl eines Generals nicht verändern. Die Integritätsklasse einer Datei garantiert, dass deren Inhalt nur aus Quellen gleicher oder höherer Integrität stammt.
