@@ -217,7 +217,7 @@ In der **dreifach** indirekten Sektoradresse ist ein Indexblock, welcher `x` dop
 
 ### 5.18.7 Wie groß kann eine Datei sein, die mit i-node verwaltet wird
 
-Die Sektoradresstabelle einer Datei ist also in 4 Abschnitte der Länge 10, x, x2 und x3 aufgeteilt, z. B. bei x = 256 mit den Längen 10, 256, 65.536 und 16.777.216. Sektoradresstabellen mit mehr als 10 + x + x2 + x3 Einträgen, die bei unserem Beispielwerten einer Datei von rund 16 GByte entsprechen, sind nicht möglich.
+Die Sektoradresstabelle einer Datei ist in 4 Abschnitte der Länge 10, x, x2 und x3 aufgeteilt, z. B. bei x = 256 mit den Längen 10, 256, 65.536 und 16.777.216. Sektoradresstabellen mit mehr als 10 + x + x2 + x3 Einträgen, die bei unserem Beispielwerten einer Datei von rund 16 GByte entsprechen, sind nicht möglich.
 
 ## 5.18.8 Wie kann man das X berechnen? Wie groß kann das X sein?
 
@@ -228,6 +228,8 @@ x = 1024 Byte / 4 Byte = 256
 
 ### 5.18.9 Wie viele Zugriffe auf die Indexblöcke bei i-node werden maximal benötigt
 
+Selbst bei extrem großen Dateien kommt man über maximal **drei** Indexblöcke zu einer beliebigen Seite, dies gilt auch für die letzte Seite und für das Anhängen von Dateiinhalt
+
 ### 5.18.10 Wie kann eine Datei unter UNIX mit Hilfe der i-nodes gefunden werden
 
 Beobachten wir nun einmal, wie das Dateisystem z.B. die Datei `/home/meier/myprogram` in der bekannten Abbildung findet
@@ -236,17 +238,31 @@ Der i-node des Wurzelverzeichnisses ist immer im Hauptspeicher. Im Wurzelverzeic
 
 ## 5.19 Wie sieht ein klassisches UNIX-Dateisystem aus
 
+![Realisierung eines klassischen UNIX-Dateisystems auf Festplatten](img/unixfs.png)
+
 ## 5.20 Wie funktioniert das Sektorfolgen-Verfahren zur Verwaltung der Sektoren einer Datei
 
 Beim Sektorfolgen will man gegenüber Sektoradresstabellen zwei Verbesserungen gleichzeitig erreichen: Der Platzbedarf für Indexblöcke wird reduziert und Plattenarmbewegungen werden vermieden. Dieses soll erreicht werden, indem die zu einer Datei gehörenden Blöcke möglichst hintereinander auf einer Spur bzw. einem Zylinder der Festplatte angeordnet sind (vgl. Interleaving). Bei großen Platten, die nicht allzu voll sind, können erfahrungsgemäß fast alle kleinen bis mittelgroßen Dateien in 1 oder 2 Sektorfolgen untergebracht werden, die Länge der Sektorfolgen liegt typischerweise im Bereich von 5 bis 20.
 
 ### 5.20.1 Wie funktioniert das NTFS-Dateisystem
 
+Die wichtigste Datenstruktur des NTFS ist die sogenannte **MFT (master file table)**, die aus einem Array von Einträgen der festen Größe 1 KByte besteht. Standardmäßig werden 12,5 Prozent der Partition dafür reserviert, theoretisch sind maximal 248 Einträge in der MFT möglich. Jeder Eintrag entspricht dem Inhalt eines *i-node* bei UNIX (Attribute: Name, Besitzer, Zeitstempel, die Zugriffsrechte und eine Liste aller zugehörigen Adressen von Datenblöcken auf der Festplatte). Bei einer sehr kleinen Datei können sogar die Daten schon innerhalb des Eintrags untergebracht werden. 
+
+Es kann eine extrem große Datei mehrere Einträge in der MFT benötigen, in diesem Fall enthält der erste Eintrag (*Base Record*) die Nummern der anderen Einträge in der MFT. Jede Datei auf einer Partition wird durch eine 64 Bit-Zahl eindeutig identifiziert, wobei die ersten 48 Bit genau dem Index des *Base Record* der Datei in der MFT entsprechen und die letzten 16 Bit die *Sequenznummer* darstellen
+
 ### 5.20.2 Was bedeutet ein Jounaling-Dateisystem
 
-## 5.21 Welche Verfahren gibt es, um die freien Sektoren zu verwalten
+Ein Protokoll (**Journal**) wird mitgeführt, in welchem aufgeschrieben wird, welche Operationen (Änderungen) ausgeführt werden. Das Wichtigste ist, dass die Operationen zuerst in das Log geschrieben werden und anschließend der Eintrag im Log auf einen Bereich auf der Festplatte übertragen wird, bevor die Operationen ausgeführt werden. Das Schreiben des Logs vom Hauptspeicher auf die Festplatte muss natürlich **atomar** sein.
 
-### 5.21.1 Wie funktionieren sie und welche Vor- und Nachteile haben sie
+Der Eintrag im Journal kann erst gelöscht werden, wenn die Operation fertig ausgeführt wurde.
+
+## 5.21 Welche Verfahren gibt es, um die freien Sektoren zu verwalten? Wie funktionieren sie und welche Vor- und Nachteile haben sie
+
+* freie Sektoren als verkettete Liste
+    * freie Liste als eine Datei (FAT)
+    * Folgesektorinformation liegt selbst im Sektor
+    * Speicherung der freien Sektornummern in Indexblöcken
+* Bitmap von freien Sektoren (ein Bit pro Sektor)
 
 ## 5.22 Wie werden bei UNIX die Zugriffsrechte einer Datei realisiert
 

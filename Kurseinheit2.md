@@ -117,6 +117,16 @@ Die gerechte Verteilung des Prozessors innerhalb eines Zeitabschnitts.
 
 ## 2.11 Welche Scheduling-Strategien mit Vor- und Nachteilen sind geeignet für ein Batchbetrieb
 
+* First Come, First Serve:
+    * **Vorteile**:
+        * Einfache Implementierung
+        * geringer Verwaltungsaufwand
+        * Fair
+    * **Nachteile**:
+        * kurze Prozesse müssen ggf. lange warten
+
+Grundsätzlich alle nicht-präemptiven Strategien für den Batchebtrieb geeignet
+
 ## 2.12 Welche Scheduling-Strategien mit Vor- und Nachteilen sind geeignet für ein nicht-kooperativen (präemptiv) interaktiver Betrieb
 
 Mit der Strategie „Multiple Queues“ werden Prozesse in verschiedene Klassen eingeteilt:
@@ -161,9 +171,12 @@ Für jede Klasse ist ein eigener Scheduler zuständig. Gesamtscheduling so ein
 
 ## 2.14 Welche theoretische Eigenschaft hat die SJF-Strategie? Was sind die Nachteile von SJF
 
-(starvation, Wissen der CPU bursts)
+1. Langlaufende Prozesse können verhungern (**starvation**), wenn sich immer kurze Prozesse vordrängeln.
+2. Der Scheduler muss wissen, wie lange ein die Bedienzeit des nächsten Prozesses ist
 
 ### 2.14.1 Wie kann man CPU bursts abschätzen
+
+Man geht davon aus, dass ein Prozess, der bisher immer nur kurze CPU bursts hatte, auch in Zukunft mit großer Wahrscheinlichkeit nur kurze CPU bursts haben wird. Ein Prozess mit großen CPU bursts hat auch in Zukunft wahrscheinlich wieder große CPU bursts.
 
 ## 2.15 Wie wird die Priorität festgelegt, wenn man die SJF-Strategie und die FCFS-Strategie als Priorität-Strategie betrachtet
 
@@ -224,3 +237,5 @@ Es können im Multiprozessor-Rechnern nur Kernel-Threads parallel eingesetzt wer
 Es kommen nur nicht-preämptive Scheduling-Strategien in Frage. #TODO: Warum
 
 ### 2.18.5 Warum kann man nur nicht-präemptive Scheduling-Strategien bei Benutzer-Threads verwenden
+
+Ein Benutzer-Thread kann nicht ohne besonders trickige Programmierung von seinem eigenen Prozess zu einer Unterbrechung gezwungen werden

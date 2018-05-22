@@ -18,6 +18,8 @@ Bei der Programmiersprache Shell gibt es Anweisungen, Schleifen, Variablen und i
 
 ### 7.4.1 Warum wird Shell in der Praxis nicht wie C, C++ und Java als Programmiersprache eingesetzt
 
+Kommandoprozeduren werden interpretiert (nicht kompiliert)
+
 ## 7.5 Was ist das Kommando make? Wie funktioniert das Kommando make? Was passiert, wenn man make eintippt
 
 Das Kommando `make` sorgt dafür, bei einer Programm-Aktualisierung nur die von der Veränderung betroffenen Programmteile zu aktualisieren, um das gesamte Programm auf den neuesten Stand zu bringen.
@@ -30,7 +32,11 @@ Diese Angaben werden in einer Datei `Makefile` abgelegt. `make` prüft das Modi
 
 ![Funktionsprinzip des Kommandos `make`](img/makefile.png)
 
-### 7.5.6 Wie wird entschieden, welche abhängigen Dateien neu übersetzt werden müssen
+### 7.5.2 Wie wird entschieden, welche abhängigen Dateien neu übersetzt werden müssen
+
+`make` liest zuerst im aktuellen Verzeichnis die Datei `Makefile` und erhält so Kenntnis über die Abhängigkeiten zwischen den Dateien. Es prüft nun das Modifikationsdatum jeder Datei und ermittelt damit, welche Dateien geändert wurden, leitet aus den im `Makefile` beschriebenen Abhängigkeiten die notwendigen Aktionen ab und führt sie aus.
+
+`make` selbst setzt keine Datei-Attribute und speichert keine eigenen Daten. Entscheidend ist immer nur der Vergleich der Zeitstempel zwischen Quelldateien und den davon abhängigen Dateien
 
 ### 7.6 wie funktioniert der Systemaufruf fork()
 
