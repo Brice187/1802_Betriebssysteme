@@ -66,15 +66,23 @@ Initialisiert man *s* mit *k*, so werden höchstens *k* gleichzeitige Zugriffe 
 
 ### 4.4.3 Wie kommt ein Prozess wieder aus der Warteschlange des Semaphors
 
+Durch die `up`-Operation eines anderen Prozesses kann der eingereihte Prozess wieder in den bereiten Zustand versetzt werden.
+
 ### 4.4.4 Warum leidet das Semaphor-Verfahren nicht unter busy waiting
 
 Nachdem ein Prozess `down` erfolgreich ausführen konnte, tritt er entweder in seinen **kritischen Abschnitt** ein *oder* stellt sich in die **Warteschlange des Semaphors** (kein aktives Warten).
 
-### 4.4.5 Wie funktioniert die down- und up-Operation
+### 4.4.5 Wie können die atomaren down- und up-Operationen realisiert werden
 
-### 4.4.6 Wie können die atomaren down- und up-Operationen realisiert werden
+### 4.4.6 Welche Vor- und Nachteile hat ein Semaphor
 
-### 4.4.7 Welche Vor- und Nachteile hat ein Semaphor
+**Vorteile**:
+
+* kein Busy-Wait
+
+**Nachteile**:
+
+* Dead-Lock möglich
 
 ## 4.5 Was ist ein Monitor
 
@@ -91,6 +99,15 @@ Analogie: Ein Raum, zu dem es nur einen einzigen bewachten Eingang gibt, so dass
 
 ### 4.5.1 Welche Vor- und Nachteile hat ein Monitor
 
+**Vorteile**:
+
+* Monitorstruktur sorgt selbst für die Durchsetzung des wechselseitigen Ausschlusses.
+* Sämtliche Synchronisierungsfunktionen sind auf den Monitor beschränkt (Überprüfung einfacher)
+
+**Nachteile**:
+
+* Dead Locks
+
 ## 4.6 Was ist das Erzeuger/Verbraucher-Problem
 
 Zwei zyklische Prozesse *Erzeuger* und *Verbraucher*(z.B. E/A-Vorgänge) produzieren, bzw. konsumieren Ware. Es ist eine Einweg-Kommunikation vorgesehen, wobei der Austausch der Ware über einen Puffer stattfindet.
@@ -98,6 +115,8 @@ Zwei zyklische Prozesse *Erzeuger* und *Verbraucher*(z.B. E/A-Vorgänge) produz
 Der gleichzeitige Zugriff von Erzeuger und Verbraucher auf den Puffer kann jedoch zu Störungen führen.
 
 ### 4.6.1 Wie kann man das Problem mit Semaphor und Monitor lösen
+
+Monitore und Semaphore sind aus theoretischer Sicht *gleich mächtig*.
 
 ## 4.7 Was ist ein Deadlock
 

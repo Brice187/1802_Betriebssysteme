@@ -21,11 +21,11 @@ Analogie Tanenbaum:
 * Zutaten = Eingabedaten
 * Vorgang des Backens = Prozess
 
-## 2.2 Was gehört zu einem Prozess?
+## 2.2 Was gehört zu einem Prozess
 
 Programmsegment, Stacksegment, Datensegment und Prozesskontrollblock => ***Prozessabbild***
 
-## 2.3 Was steht im Prozesskontrollblock?
+## 2.3 Was steht im Prozesskontrollblock
 
 Alle Daten, die das Betriebssystem über einen Prozess verwalten muss:
 
@@ -48,11 +48,11 @@ Bis auf rechnend werden die Prozesse je Zustand in Listen verwaltet
 
 ![Prozesszustandsübergangsdiagramm](img/Uebergang.png)
 
-## 2.5 Bei einem Einprozessorsystem läuft zu jedem Zeitpunkt genau ein Prozess. Warum laufen die Prozesse trotzdem scheinbar parallel?
+## 2.5 Bei einem Einprozessorsystem läuft zu jedem Zeitpunkt genau ein Prozess. Warum laufen die Prozesse trotzdem scheinbar parallel
 
 Abhängig von der Scheduling-Strategie findet für den Benutzer ein nahezu unbemerkbar schneller Wechsel zwischen den Prozessen statt. Dadurch kommen (die interaktiven) Prozesse ungefähr gleich viel CPU-Zeit pro Zeitabschnitt und der Anwender hat den Eindruck einer parallelen Ausführung der Prozesse.
 
-### 2.5.1 Wie kann einem Prozess der Prozessor entzogen werden? Welche Hardware übernimmt diese Aufgabe, damit das Betriebssystem die Kontrolle wieder zurück erhält?
+### 2.5.1 Wie kann einem Prozess der Prozessor entzogen werden? Welche Hardware übernimmt diese Aufgabe, damit das Betriebssystem die Kontrolle wieder zurück erhält
 
 Bei präemptiven Systemen startet ein Timer (Hardware) zu Beginn jedes rechnenden Prozesses. Nach Ablauf einer bestimmten Zeitscheibe (z. B. 100 ms) erzeugt der Timer eine Unterbrechung (Interrupt) und das Betriebssystem erhält die Kontrolle zurück.
 
@@ -187,7 +187,7 @@ Man geht davon aus, dass ein Prozess, der bisher immer nur kurze CPU bursts hatt
 
 Jeder Prozess hat die Größe der Zeitscheibe unendlich.
 
-## 2.17 Wie soll man die Länge einer Zeitscheibe wählen? Was muss man bei der Auswahl einer Zeitscheibe beachten? Welche Probleme können bei zu langer oder zu kurzer Zeitscheibe entstehen?
+## 2.17 Wie soll man die Länge einer Zeitscheibe wählen? Was muss man bei der Auswahl einer Zeitscheibe beachten? Welche Probleme können bei zu langer oder zu kurzer Zeitscheibe entstehen
 
 * Wählt man das Quantum zu **klein**, gibt es ein ungünstiges Verhältnis `Verwaltungsaufwand <-> „echte Arbeit“`. Im worst case ist der Prozessor nur mit der Prozessumschaltung beschäftigt und fast gar nicht mit „echter“ Arbeit.
 * Wählt man Quantum zu **groß**, werden die Wartezeiten für die interaktiven Benutzer unzumutbar groß.

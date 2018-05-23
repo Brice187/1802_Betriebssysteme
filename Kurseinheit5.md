@@ -4,7 +4,7 @@
 
 Die allermeisten Geräte werden über einen Controller mit mit der CPU verbunden. Controller sind entweder auf der Hauptplatine des Rechners oder in Form einer Steckkarte mit CPU und Hauptspeicher zusammen im gleichen Gehäuse untergebracht.
 
-Vorteile:
+**Vorteile:**
 
 * CPU wird von elementaren Aufgaben (z. B. Checksums zur Fehlererkennung) entlastet. Controller hat spezialisierten Prozessor hierfür
 * neuartige Geräte mit Controller, der bekannten Gerätetyp simuliert, kann ohne Änderung des BS an einem Rechner betrieben werden
@@ -19,7 +19,7 @@ CPU und Controller benutzen spezielle Register im Controller für Daten und Bef
 
 ![Speicherabgebildete Ein-/Ausgabe (memory-mapped I/O).](img/memorymappedio.png)
 
-### 5.2.1 Welche drei Techniken gibt es für die Ein-/Ausgabe? Wie funktioniert die Ein- und Ausgabe? Welche Vor- und Nachteile haben diese Techniken?
+### 5.2.1 Welche drei Techniken gibt es für die Ein-/Ausgabe? Wie funktioniert die Ein- und Ausgabe? Welche Vor- und Nachteile haben diese Techniken
 
 #### 1. Programm-gesteuerte Ein-/Ausgabe
 
@@ -219,7 +219,7 @@ In der **dreifach** indirekten Sektoradresse ist ein Indexblock, welcher `x` dop
 
 Die Sektoradresstabelle einer Datei ist in 4 Abschnitte der Länge 10, x, x2 und x3 aufgeteilt, z. B. bei x = 256 mit den Längen 10, 256, 65.536 und 16.777.216. Sektoradresstabellen mit mehr als 10 + x + x2 + x3 Einträgen, die bei unserem Beispielwerten einer Datei von rund 16 GByte entsprechen, sind nicht möglich.
 
-## 5.18.8 Wie kann man das X berechnen? Wie groß kann das X sein?
+## 5.18.8 Wie kann man das X berechnen? Wie groß kann das X sein
 
 1 KByte große Blöcken
 4 Byte lange Sektoradressen
@@ -246,7 +246,7 @@ Beim Sektorfolgen will man gegenüber Sektoradresstabellen zwei Verbesserungen 
 
 ### 5.20.1 Wie funktioniert das NTFS-Dateisystem
 
-Die wichtigste Datenstruktur des NTFS ist die sogenannte **MFT (master file table)**, die aus einem Array von Einträgen der festen Größe 1 KByte besteht. Standardmäßig werden 12,5 Prozent der Partition dafür reserviert, theoretisch sind maximal 248 Einträge in der MFT möglich. Jeder Eintrag entspricht dem Inhalt eines *i-node* bei UNIX (Attribute: Name, Besitzer, Zeitstempel, die Zugriffsrechte und eine Liste aller zugehörigen Adressen von Datenblöcken auf der Festplatte). Bei einer sehr kleinen Datei können sogar die Daten schon innerhalb des Eintrags untergebracht werden. 
+Die wichtigste Datenstruktur des NTFS ist die sogenannte **MFT (master file table)**, die aus einem Array von Einträgen der festen Größe 1 KByte besteht. Standardmäßig werden 12,5 Prozent der Partition dafür reserviert, theoretisch sind maximal 248 Einträge in der MFT möglich. Jeder Eintrag entspricht dem Inhalt eines *i-node* bei UNIX (Attribute: Name, Besitzer, Zeitstempel, die Zugriffsrechte und eine Liste aller zugehörigen Adressen von Datenblöcken auf der Festplatte). Bei einer sehr kleinen Datei können sogar die Daten schon innerhalb des Eintrags untergebracht werden.
 
 Es kann eine extrem große Datei mehrere Einträge in der MFT benötigen, in diesem Fall enthält der erste Eintrag (*Base Record*) die Nummern der anderen Einträge in der MFT. Jede Datei auf einer Partition wird durch eine 64 Bit-Zahl eindeutig identifiziert, wobei die ersten 48 Bit genau dem Index des *Base Record* der Datei in der MFT entsprechen und die letzten 16 Bit die *Sequenznummer* darstellen
 
