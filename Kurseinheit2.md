@@ -62,7 +62,7 @@ Der Scheduler legt fest, welcher Prozess als nächster den Prozessor erhalten so
 
 ### 2.6.1 Wer entscheidet, welcher Prozess vom Zustand bereit in den Zustand rechnend geht
 
-Der Scheduler entscheidet, welcher Prozess vom Zustand bereit zum Zustand rechnend geht, d.h. die Reihenfolge der Prozesse in der Warteschlange realisiert (präsentiert) genau die Scheduling-Strategie, die der Scheduler gewählt hat.
+Der Scheduler entscheidet, welcher Prozess vom Zustand bereit zum Zustand rechnend geht, d.h. die Reihenfolge der Prozesse in der Warteschlange realisiert genau die Scheduling-Strategie, die der Scheduler gewählt hat.
 
 ### 2.6.2 Warum geht ein Prozess vom Zustand rechnend zum Zustand bereit
 
@@ -96,8 +96,8 @@ Damit ein Prozesswechsel statt finden kann, muss die CPU vorher aus dem Benutzer
 
 ## 2.9 Was heiﬂt nicht-präemptiv? Was heiﬂt präemptiv
 
-* Bei **nicht-preämptiven** Betriebssystemen entscheidet nur Prozess selbst, ob er den Prozessor wieder abgeben möchte.
-* Bei **preämptiven** Systemen entzieht das BS einem laufenden Prozess den Prozessor.
+* Bei **nicht-präemptiven** Betriebssystemen entscheidet nur Prozess selbst, ob er den Prozessor wieder abgeben möchte.
+* Bei **präemptiven** Systemen entzieht das BS einem laufenden Prozess den Prozessor.
 
 ## 2.10 Welche Qualitätsmerkmale von Scheduling-Strategien gibt es
 
@@ -125,7 +125,7 @@ Die gerechte Verteilung des Prozessors innerhalb eines Zeitabschnitts.
     * **Nachteile**:
         * kurze Prozesse müssen ggf. lange warten
 
-Grundsätzlich alle nicht-präemptiven Strategien für den Batchebtrieb geeignet
+Grundsätzlich alle nicht-präemptiven Strategien für den Batchbetrieb geeignet
 
 ## 2.12 Welche Scheduling-Strategien mit Vor- und Nachteilen sind geeignet für ein nicht-kooperativen (präemptiv) interaktiver Betrieb
 
@@ -160,14 +160,14 @@ Für jede Klasse ist ein eigener Scheduler zuständig. Gesamtscheduling so ein
         * Die Dauer des nächsten CPU bursts ist nicht bekannt und kann nur geraten bzw. geschätzt werden.
         * größerer Verwaltungsaufwand O(log n).
 
-* **2.5.2.3 Priority Scheduling**: Prozesse werden in unterschiedlich wichtige Klassen einteilt. Zuerst bekommen die Prozesse der wichtigsten Klasse den Prozessor zugeteilt, dann erst die der weniger wichtigen Klassen.
+* **Priority Scheduling**: Prozesse werden in unterschiedlich wichtige Klassen einteilt. Zuerst bekommen die Prozesse der wichtigsten Klasse den Prozessor zugeteilt, dann erst die der weniger wichtigen Klassen.
     * Prioritäten können dabei **intern** (z. B. vom Hauptspeicherbedarf, Plattenspeicherbedarf, der Anzahl der geöffneten Dateien, der bisher verbrauchten Rechenzeit usw.) oder **extern** (Benutzer) vergeben werden.
     * *Statische* Priorität bedeutet, dass jeder Prozess eine Priorität zugeordnet bekommt und und diese bis zu seinem Ende behält. Prozesse mit niedriger Priorität müssen u.U. ewig warten
     * **Vorteile**
         * Wichtige Aufgaben werden schnell erledigt.
     * **Nachteile**
         * Bei statischer Prioritätsvergabe nicht fair, da Prozesse dann verhungern können.
-        * Wie die Prioritäten festgelegt werden sollen, ist nicht so ohne weiteres klar.
+        * Wie die Prioritäten festgelegt werden sollen, ist nicht ohne weiteres klar.
 
 ## 2.14 Welche theoretische Eigenschaft hat die SJF-Strategie? Was sind die Nachteile von SJF
 
@@ -189,7 +189,7 @@ Jeder Prozess hat die Größe der Zeitscheibe unendlich.
 
 ## 2.17 Wie soll man die Länge einer Zeitscheibe wählen? Was muss man bei der Auswahl einer Zeitscheibe beachten? Welche Probleme können bei zu langer oder zu kurzer Zeitscheibe entstehen
 
-* Wählt man das Quantum zu **klein**, gibt es ein ungünstiges Verhältnis `Verwaltungsaufwand <-> „echte Arbeit“`. Im worst case ist der Prozessor nur mit der Prozessumschaltung beschäftigt und fast gar nicht mit „echter“ Arbeit.
+* Wählt man das Quantum zu **klein**, gibt es ein ungünstiges Verhältnis `Verwaltungsaufwand <-> „echte Arbeit“`. Im *worst case* ist der Prozessor nur mit der Prozessumschaltung beschäftigt und fast gar nicht mit „echter“ Arbeit.
 * Wählt man Quantum zu **groß**, werden die Wartezeiten für die interaktiven Benutzer unzumutbar groß.
 
 Eine sinnvolle Größe für das Quantum ist ein Wert, der etwas größer als die für eine übliche Interaktion erforderliche Zeit ist, typischerweise in Millisekunden-Größenordnungen.
@@ -234,7 +234,7 @@ Es können im Multiprozessor-Rechnern nur Kernel-Threads parallel eingesetzt wer
 
 ### 2.18.4 Welche Scheduling-Strategien kann man bei Benutzer-Threads verwenden? Warum
 
-Es kommen nur nicht-preämptive Scheduling-Strategien in Frage. #TODO: Warum
+Es kommen nur nicht-präemptive Scheduling-Strategien in Frage. #TODO: Warum
 
 ### 2.18.5 Warum kann man nur nicht-präemptive Scheduling-Strategien bei Benutzer-Threads verwenden
 

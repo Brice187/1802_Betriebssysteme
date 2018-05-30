@@ -62,7 +62,7 @@ Rechner besteht aus einer Hierarchie von virtuellen Maschinen. Jede virtuelle Ma
 
 ### 1.2.1 Welche Vorteile hat ein Ebenenmodell
 
-Das Ebenenmodell abstrahiert schrittweise von komplexer Hardware zur immer einfacheren Beherrschbarkeit für den Applikationsentwickler.
+Das Ebenenmodell abstrahiert schrittweise von kompexer Hardware zur immer einfacheren Beherrschbarkeit für den Applikationsentwickler.
 
 ### 1.2.2 Was ist das Prinzip eines Ebenenmodells
 
@@ -133,7 +133,7 @@ Die Antwort soll die Antworten auf folgende Fragen beinhalten:
 
 ### 1.4.1 Warum löst ein Ein-/Ausgabegerät eine Unterbrechung aus
 
-Da E/A-Operationen eine unbestimmte Laufzeit haben. Damit die CPU nicht *warten* muss, bis eine Operation beendet ist, macht sie andere anstehende Aufgaben. Das E/A-Gerät sendet ein Signal(**Unterbrechung**) an den Unterbrechungseingang der CPU und teilt mit, ob der E/A-Auftrag erfolgreich oder nicht erfolgreich ausgeführt wurde.
+E/A-Operationen haben eine unbestimmte Laufzeit. Damit die CPU nicht *warten* muss, bis eine Operation beendet ist, macht sie andere anstehende Aufgaben. Das E/A-Gerät sendet ein Signal(**Unterbrechung**) an den Unterbrechungseingang der CPU und teilt mit, ob der E/A-Auftrag erfolgreich oder nicht erfolgreich ausgeführt wurde.
 
 ### 1.4.2 Wie kann die CPU wissen, ob eine Unterbrechung vorliegt
 
@@ -180,7 +180,7 @@ Der Ansatz wird durch Hardware unterstützt: die CPU hat hierfür zwei oder mehr
 
 ### 1.5.3 Wozu werden Systemaufrufe gebraucht? Wie wird ein Systemaufruf identifiziert
 
-Die Systemaufrufe bilden die Schnittstelle zwischen dem Betriebssystem und den Benutzerprogrammen. Jeder Systemaufruf bekommt eine eindeutige Nummer. Diese Nummer kann z. B. in einem Register oder in einem Parameterfeld des Maschinenbefehls SVC gespeichert werden. Nach dem SVC-interrupt findet Betriebssystem diese Nummer an der festgelegten Stelle und benutzt sie wieder als Index für eine Tabelle, die die Adressen der Unterprogramme enthält, die zu den Systemaufrufen gehören
+Die Systemaufrufe bilden die Schnittstelle zwischen dem Betriebssystem und den Benutzerprogrammen. Jeder Systemaufruf bekommt eine eindeutige Nummer. Diese Nummer kann z. B. in einem Register oder in einem Parameterfeld des Maschinenbefehls `SVC` gespeichert werden. Nach dem SVC-interrupt findet das Betriebssystem diese Nummer an der festgelegten Stelle und benutzt sie wieder als Index für eine Tabelle, die die Adressen der Unterprogramme enthält, die zu den Systemaufrufen gehören
 
 ## 1.6 Wie kann man den Mehrprogrammbetrieb realisieren
 
@@ -192,7 +192,7 @@ Pro CPU läuft ein Prozess
 
 ### 1.6.2 Warum hat man das Gefühl, dass die Prozesse sogar bei einem Einprozessorsystem quasi-parallel laufen
 
-Jedes ausgeführte Programm bildet einen Prozess. Diese laufen nicht echt parallel, da nur eine CPU zur Verfügung steht. Jeder Prozess hat allerdings einen vom Betriebssystem simulierten eigene virtuelle CPU, denkt also, er läuft exklusiv auf der CPU.
+Jedes ausgeführte Programm bildet einen Prozess. Diese laufen nicht echt parallel, da nur eine CPU zur Verfügung steht. Jeder Prozess hat allerdings vom Betriebssystem eine eigene virtuelle CPU, denkt also, er läuft exklusiv auf der CPU.
 
 ## 1.7 Wie wird eine (Service-)Routine (Funktion) im Kern durch Benutzerprogramme erreicht? Wie funktioniert der SVC
 

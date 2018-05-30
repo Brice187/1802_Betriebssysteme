@@ -4,7 +4,7 @@
 
 ### 3.1.1 Es muss möglich sein, dass einem Prozess dynamisch einen verschiebbaren Teil vom Hauptspeicher zugewiesen wird und diese Zuweisung transparent für die Programmierer sein soll
 
-(Basisregister, logische Adressen)
+Den physischen Hauptspeicheradressen werden logische Adresse zugewiesen. Ein logischer Speicherbereich kann dann ab einem Basisregister (für eine Anwendung ist dies immer Adresse **0**) bis zur vorgegebenen Größe belegt werden. Die Anwendung hat somit einen eigenen, virtuellen Speicherbereich, aus welchem Sie nicht ausbrechen kann.
 
 ### 3.1.2 Das Konzept der Modularisierung von Programmen soll unterstützt werden
 
@@ -67,7 +67,7 @@ Das BS belegt im Arbeitsspeicher die Adressen von *0* bis *a* Byte. Ein Anwender
 * **Interne Fragmentierung**: Entsteht dadurch, dass einem Prozess ein größerer Speicherbereich zugewiesen wird, als benötigt wird.
 * **Externe Fragmentierung**: Bedeutet, dass nicht zugewiesene Speicherbereiche zu klein sind, um die Speicherplatzanforderungen von auf Ausführung wartenden Prozessen zu erfüllen.
 
-### 3.7.1 Welche Fragmentierung haben die Speicherzuweisungsstrategien MFT, MVT, Bude, Paging
+### 3.7.1 Welche Fragmentierung haben die Speicherzuweisungsstrategien MFT, MVT, Buddy, Paging
 
 Bei MFT tritt vorwiegend interne Fragmentierung auf, bei MVT externe. Bei Paging gibt es nur interne Fragmentierung.
 
@@ -76,6 +76,8 @@ Bei MFT tritt vorwiegend interne Fragmentierung auf, bei MVT externe. Bei Paging
 Der logische Hauptspeicher wird in Einheiten einer bestimmten Größe unterteilt -> **Page/Seite**
 
 ### 3.8.1 Was ist der Unterschied zwischen einer Seite und einem Segment
+
+Eine Seite hat ist ein logischer Speicherbereich mit einer vorgegebenen Größe, ein Segmet ist ein zusammenhängender Abschnitt des *physischen* Speichers
 
 ### 3.8.2 Wie sieht eine logische Adresse bei paging aus
 
@@ -163,6 +165,8 @@ Weiterhin brauchen wir eine Seitentabelle.
 
 ## 3.15.1 Wie sieht eine virtuelle Adresse aus
 
+Die logische/virtuelle Adresse wird in eine Seitennummer und ein Offset geteilt.
+
 ## 3.15.2 Warum ist der virtuelle Hauptspeicher byteweise adressiert
 
 (Abbildungsweise einer virtuellen Adresse)
@@ -180,11 +184,16 @@ Da dies u.U. dauert, wird ein Prozesswechsel durchgeführt, falls ein anderer P
 
 ### 3.17.2 Wie wird ein Seitenfehler erkannt
 
+Der Prozess kann nicht auf die gewünschte Seite zugreifen und löst eine Unterbrechung (*Trap*) aus
+
 ### 3.17.3 Was muss das Betriebssystem bei einem Seitenfehler tun
+
+Einen Seitenrahmen auslagern, um die gesuchte Seite einzulagern
 
 ## 3.18 Welche Ladestrategien gibt es
 
-(d.h. wann soll eine Seite in den Hauptspeicher geholt werden?)
+1. demand paging
+2. prepaging
 
 ### 3.18.1 Was heißt demand paging? Was heißt prepaging
 
@@ -200,6 +209,11 @@ Unter der Lokalität des Zugriffsverhaltens von Prozessen verstehen wir, dass u
 Der Prozess sieht dann im virtuellen Hauptspeicher die Daten, die in der Datei stehen. Verändert er diese Daten, verändert er implizit auch den Inhalt der Datei.
 
 Dies ist eine Alternative zum klassischen E/A-Verfahren.
+
+Vorteile:
+
+* Es wird immer nur auf einen kleinen Teil der Datei direkt zugegriffen (Datei muss nicht erst geladen werden, um dann HDD, RAM und Swap zu belegen)
+* IPC: Eine Datei wird in mehrere Adressräume eingeblendet
 
 ## 3.21 Welche Seitenauslagerungsstrategien gibt es
 
