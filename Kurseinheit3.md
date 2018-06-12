@@ -4,15 +4,23 @@
 
 ### 3.1.1 Es muss möglich sein, dass einem Prozess dynamisch einen verschiebbaren Teil vom Hauptspeicher zugewiesen wird und diese Zuweisung transparent für die Programmierer sein soll
 
-Den physischen Hauptspeicheradressen werden logische Adresse zugewiesen. Ein logischer Speicherbereich kann dann ab einem Basisregister (für eine Anwendung ist dies immer Adresse **0**) bis zur vorgegebenen Größe belegt werden. Die Anwendung hat somit einen eigenen, virtuellen Speicherbereich, aus welchem Sie nicht ausbrechen kann.
+Den physischen Hauptspeicheradressen werden logische Adresse zugewiesen. Ein logischer Speicherbereich kann dann ab einem *Basisregister* (für eine Anwendung ist dies immer Adresse **0**) bis zur vorgegebenen Größe belegt werden. Die Anwendung hat somit einen eigenen, virtuellen Speicherbereich, aus welchem Sie nicht ausbrechen kann.
 
 ### 3.1.2 Das Konzept der Modularisierung von Programmen soll unterstützt werden
+
+Eine logische Adresse ist hardwareunabhängig: sie zeigt auf einen Ort unabhängig von der konkreten Zuweisung zwischen Datenbereichen und physischem Hauptspeicher. Vor jedem Zugriff auf eine logische Adresse muss diese zunächst in eine physische Adresse übersetzt werden. Die MMU bildet logische Adressen auf physische Adressen im Hauptspeicher ab.
+
+
 
 (logische Adressen, dynamisches Binden, paging)
 
 ### 3.1.3 Die Isolierung des Speichers jedes einzelnen Prozesses (durch die Hardware) muss realisiert werden
 
-(Basis- und Grenzenregister)
+Das **Grenzregister** ist die Grenze, ab welchem im Hauptspeicher Adressbereich für Applikationen vergeben werden können. Das Grenzregister kann im Kernelmodus gesetzt werden.
+
+Das **Basisregister** ist die Startadresse für den virtuellen Speicherbereich
+
+![Speicherschutz durch Grenzregister und Basisregister](img/grenzregister.png)
 
 ### 3.1.4 Die gemeinsame Benutzung von Programmsegmenten (shared memory) soll möglich sein
 
@@ -30,8 +38,8 @@ Eine **physische Adresse** ist eine reale Adresse einer Speicherzelle in einem H
 
 Lader möchte Programm laden und dafür sorgen muss, dass die im geladenen Programm auftretenden Adressen im logischen Adressraum des Prozesses liegen. Hierzu gibt es zwei Möglichkeiten:
 
-1. Wenn bereits der Binder die Adressen des logischen Hauptspeichers kennt, der bei der Ausführung des zu erzeugenden Lademoduls verfügbar sein wird, kann er bereits passende Adressen erzeugen. Diese Adressen nennt man auch "absolute Adressen." Nachteil der absoluten Adressen ist, dass das Lademodul nur noch an genau diesen Bereich logischer Adressen geladen werden kann.
-2. Abhilfe schaffen die relativen Adressen. Hier kann das Lademodul an einen beliebigen logischen Adressbereich geladen werden. Der Binder nimmt an, dass im logischen Hauptspeicher von 0 an nummerierte Adressen zur Verfügung stehen. Diese Adressen nennt man "relative Adressen." Der Laden muss beim Laden dann nur noch die Startadresse des verfügbaren Bereichs logischer Adressen aufaddieren, um die im Programm auftretenden relativen Adressen in absolute umzuformen
+1. Wenn bereits der Binder die Adressen des logischen Hauptspeichers kennt, der bei der Ausführung des zu erzeugenden Lademoduls verfügbar sein wird, kann er bereits passende Adressen erzeugen. Diese Adressen nennt man auch "absolute Adressen". Nachteil der absoluten Adressen ist, dass das Lademodul nur noch an genau diesen Bereich logische Adressen geladen werden kann.
+2. Abhilfe schaffen die relativen Adressen. Hier kann das Lademodul an einen beliebigen logischen Adressbereich geladen werden. Der Binder nimmt an, dass im logischen Hauptspeicher von 0 an nummerierte Adressen zur Verfügung stehen. Diese Adressen nennt man "relative Adressen". Der Lader muss beim Laden dann nur noch die Startadresse des verfügbaren Bereichs logischer Adressen aufaddieren, um die im Programm auftretenden relativen Adressen in absolute umzuformen.
 
 ### 3.3.1 Welche Vorteile haben relative Adressen
 
@@ -39,21 +47,47 @@ Ein Prozess braucht nicht die physischen Adressen bei der Ausführung eines Pro
 
 ## 3.4 Ein Programm besteht aus vielen verschiedenen Moduln. Was muss gemacht werden, damit das Programm ausführbar wird
 
+1. Ein Quellprogramm-Modul wird zunächst vom *Compiler* oder Assemblierer in ein *Bindemodul* übersetzt
+2. Der **Binder** erzeugt ein *Lademodul*, das die aneinander grenzende Verknüpfung aller Bindemoduln darstellt
+3. Das *Lademodul* wird vom **Lader** in den logischen Hauptspeicher des Prozesses geladen.
+
+![Die Schritte vom Quellprogramm bis zum ausführbaren Programm](img/compile.png)
+
 ## 3.5 Welche Speicherzuweisungsstrategien zur Verwaltung des Hauptspeichers gibt es
 
-(Einfach zusammenhängend, mehrfach zusammenhängend, MFT, MVT, Bude, Paging.
 Bei MVT gibt es bei der Auswahl eines freien Segments Verfahren: First Fit, Next Fit, Best Fit, Worst Fit und Buddy.
 
 * **Einfach zusammenhängende Speicherzuweisung**: Es befindet sich zu jedem Zeitpunkt maximal ein Benutzerprozess im Hauptspeicher.
+
+![Einfache zusammenhängende Speicherzuweisung](img/einfach.png)
+
 * **Mehrfach zusammenhängende Speicherzuweisung**: Mehrere Programme und deren Daten werden nebeneinander aufgenommen.
-* **MFT**: multiprogramming with a fixed number of tasks.
+
+1. **MFT**: multiprogramming with a fixed number of tasks.
     * Fixe Segmentgrößen im Speicher
     * unmöglich, günstige Segmentgrößen zu finden, da die benötigten Größen i.d.R. nicht vorher abgeschätzt werden können
     * Scheduling-Strategie: einem Auftrag das kleinste zur Verfügung stehende Segment zugewiesen, also kein unnötig großes (best-available-fit). Trotzdem kommt es zu interner Fragmentierung
 
 ![MFT: Der Speicher wird in vier Segmente von 100, 200, 200 und 500 KB aufgeteilt, interne Fragmentierung tritt auf.](img/MFT.png)
 
-## 3.6 Ein Programm mit logischen Adressen wird zur Ausführung in den Hauptspeicher geladen. Welche Hardware-Unterstützung braucht man, um den Zugriff einer physischen Adresse des Programms zu realisieren?
+2. **MVT**: multiprogramming with a variable number of tasks.
+
+Scheduling Strategien:
+
+* **First Fit**: Die erste ausreichend große Lücke im Hauptspeicher wird belegt
+* **Next Fit**: Die nächste ausreichend große Lücke im Hauptspeicher wird belegt
+* **Best Fit**: Die am besten ausreichend große Lücke im Hauptspeicher wird belegt (=kleinster Verschnitt -> externe Fragmentierung)
+* **Worst Fit**: Die am schlechtesten ausreichend große Lücke im Hauptspeicher wird belegt (große Reststücke)
+
+![MVT: Externe Fragmentierung tritt auf.](img/MVT.png)
+
+* **Buddy**:
+
+Der zugewiesene Speicherplatz wird immer auf die nächsthöhere 2er-Potenz aufgerundet. Bei 100 angeforderten Bytes würden also 128 zugeteilt -> **interne Fragmentierung**
+
+![Das Buddy-Verfahren zur Speicherzuteilung.](img/buddy.png)
+
+## 3.6 Ein Programm mit logischen Adressen wird zur Ausführung in den Hauptspeicher geladen. Welche Hardware-Unterstützung braucht man, um den Zugriff einer physischen Adresse des Programms zu realisieren
 
 ### 3.6.1 Wie kann man mit dieser Unterstützung den Speicherschutz realisieren
 
@@ -112,7 +146,7 @@ In der MMU (Memory Management Unit) werden logische Adressen in physische Adress
 
 Es ist nun möglich, jede Seite individuell zu schützen. Wenn z.B. Programme und Daten auf verschiedenen Seiten stehen, kann das Programm gegen Schreiben geschützt werden und auf den Daten schreiben erlaubt werden. Hierzu enthält die Seitentabelle ein Protection-Bit (Schutzbit), welches durch die Hardware bei jedem Zugriff geprüft wird. Es können drei Bits benutzt werden, jeweils eines für Leserecht, Schreibrecht und Ausführungsrecht.
 
-### 3.9 Was ist Shared Memory? Wie funktioniert sie? Was ist der Vorteil
+### 3.9 Was ist Shared Memory? Wie funktioniert Shared Memory? Was ist der Vorteil
 
 Gemeinsam von mehreren Prozessen genutzter virtueller Hauptspeicher:
 
@@ -120,11 +154,11 @@ Wenn ein Prozess auf eine Seite des Shared Memory schreibt, erscheint der modifi
 
 ### 3.9.2 Welche Probleme können entstehen, wenn mehr als ein Prozess eine Shared Memory modifiziert
 
-(Inkonsistenz, Inkorrekt)
+Es kann zu Inkonsistenzen kommen (z.B. race conditions)
 
 ### 3.9.3 Was muss gemacht werden, damit diese Probleme vermeiden werden können
 
-Synchronisierung der Prozesse)
+Synchronisierung der Prozesse ist notwendig.
 
 ## 3.10 Wie oft wird der Hauptspeicher mindestens bei paging zugegriffen, wenn ein Wort im Hauptspeicher geholt wird
 
@@ -138,7 +172,7 @@ Die komplette Seitentabelle wird im physischen Hauptspeicher abgelegt. Hieraus w
 Diese enthalten etwa 8 – 16 Einträge. Wenn im TLB eine gesuchte Seitennummer vorhanden ist (**TLB hit**), wird die zugehörige Seitenrahmennummer ausgegeben. Dieser Vorgang ist etwa 10mal schneller als ein Hauptspeicher-Zugriff.
 Wenn die gesuchte Seitennummer nicht vorhanden ist **TLB miss**, wird die zugehörige Seitenrahmennummer aus der Seitentabelle geholt und in die TLB eingetragen. Hierbei muss i.d.R. ein schon vorhandener Eintrag verdrängt werden.
 
-## 3.12 Wie kann man die Seitentabelle verwalten, wenn sie zu groﬂ ist
+## 3.12 Wie kann man die Seitentabelle verwalten, wenn sie zu groß ist
 
 Eine Seitentabelle darf so lang sein, wie eine Seite. Sollte man eine größere Tabelle benötigten, bietet sich eine mehrstufigen Seitentabellen an.
 
@@ -148,14 +182,14 @@ Bei einem zweistufigen Seitentabellen-Verfahren gibt es eine erste Stufe, bei de
 
 ![Zweistufige Seitentabellen](img/seitentabelle2.png)
 
-## 3.13 Was ist die Idee (das Ziel) des virtuellen Speichers
+## 3.13 Was ist die Idee (das Ziel) des virtuellen Speichers? Was ermöglicht die Realisierung des Konzepts des virtuellen Speichers
 
-Schreiben eines Programms ohne Einschränkung der Gröﬂe des Hauptspeichers, Zerlegung von Programmen, nur der Teil im Hauptspeicher bleibt, der gerade gebraucht wird.
-Die Trennung zwischen logischen und physischen Adressen und die Unterstützung von MMU machen Programme verschiebbar und die Realisierung des Konzepts möglich. Virtueller Hauptspeicher unterstützt die Unabhängigkeit der Software von der Hardware.  Die Lokalitätseigenschaft unterstützt die Effizienz. Das Betriebssystem realisiert das virtuelle Konzept, so dass es transparent für Benutzer und Benutzerprozesse ist. )
-
-## 3.14 Was ermöglicht die Realisierung des Konzepts des virtuellen Speichers
-
-(Prozesse arbeiten nur mit logischen Adressen, die physischen Adressen werden erst zur Ausführungszeit mit Hilfe von Hardware MMU abgebildet--> Relokierbarkeit, paging-Technik, Seitentabelle-->Anwesenheit einer Seite, Auslagerungsbereich im Sekundärspeicher.)
+* Schreiben eines Programms ohne Einschränkung der Größe des Hauptspeichers
+* Zerlegung von Programmen (nur der Teil im Hauptspeicher bleibt, der gerade gebraucht wird)
+* Trennung zwischen logischen und physischen Adressen und die Unterstützung von MMU machen Programme verschiebbar
+* Virtueller Hauptspeicher unterstützt die Unabhängigkeit der Software von der Hardware, da Prozesse nur mit logischen Adressen arbeiten (physische Adressen werden erst zur Ausführungszeit mit Hilfe der MMU abgebildet)
+* Die Lokalitätseigenschaft unterstützt die Effizienz.
+* Das Betriebssystem realisiert das virtuelle Konzept (transparent für Benutzer und Benutzerprozesse)
 
 ## 3.15 Was wird gebraucht, um das virtuelle Hauptspeicher-Konzept mit paging zu realisieren
 
