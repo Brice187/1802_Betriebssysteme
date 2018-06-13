@@ -1,6 +1,6 @@
 # Kurseinheit 6
 
-## 6.1 Was sind die Ziele der Sicherheitsmaﬂnahmen
+## 6.1 Was sind die Ziele der Sicherheitsmaßnahmen
 
 * **Vertraulichkeit**: Daten dürfen nur von Personen gelesen werden, die hierzu befugt sind
 * **Integrität**: Unversehrtheit und Korrektheit von Daten
@@ -10,7 +10,7 @@
 
 ## 6.2 Was sind der Unterschied zwischen dem persistenten und transienten Rechtezustand
 
-* **persistent**: der Systemabschaltungen überdauernde Zustand eines Rechners. Der persistente Rechtezustand macht direkt oder indirekt Aussagen darüber, welche Subjekte auf welchen Objekten welche Operationen ggf. mit welchen Parametern ausführen dürfen oder nicht ausführen dürfen. Man erkennt sofort, dass nur solche Subjekte und Objekte im Rahmen des persistenten Rechtezustands Sinn machen, die ebenfalls persistent sind; Prozesse sind z. B. keine persistenten Subjekte. In vielen Systemen sind nur Dateien persistente Objekte (Linux: alles ist eine Datei)
+* **persistent**: der Systemabschaltungen überdauernde Zustand eines Rechners. Der persistente Rechtezustand macht direkt oder indirekt Aussagen darüber, welche Subjekte auf welchen Objekten welche Operationen ggf. mit welchen Parametern (nicht) ausführen dürfen. Man erkennt sofort, dass nur solche Subjekte und Objekte im Rahmen des persistenten Rechtezustands Sinn machen, die ebenfalls persistent sind; Prozesse sind z. B. keine persistenten Subjekte. In vielen Systemen sind nur Dateien persistente Objekte (Linux: alles ist eine Datei)
 
 ![Ein Funktionsschema für Zugriffskontrollen, die Kästen stellen Funktionsbereiche oder Systemzustände dar, nicht unbedingt Moduln](img/persistent.png)
 
@@ -29,7 +29,7 @@ Nachdem die Datei einmal geöffnet ist, werden bei jedem einzelnen Lesen eines 
 * normale und ausführbare Dateien
 * Verzeichnisse bzw. ganze Bäume von Verzeichnissen
 * Bänder, Disketten oder andere Medien,
-* Schnittstellen, Uhren, Seiten, Datenstrukten
+* Schnittstellen, Uhren, Seiten, Datenstrukturen
 
 Jedes Objekt hat einen eindeutigen Namen, über den es referenziert wird und eine endliche Menge von Operationen, die von Prozessen auf diesem Objekt ausgeführt werden können. Z. B. für eine Datei sind die Operationen **read** und **write** sinnvoll; bei einem Semaphor sind **down** und **up** sinnvoll.
 
@@ -49,22 +49,22 @@ Setuid (Set User ID, manchmal auch suid) ist ein Zugriffsbit für Dateien oder 
 
 ## 6.6 Können Sie ein Beispiel der Anwendung von SETUID-Bit angeben Wie funktioniert die Änderung der passwd-Datei? Was ist mit der Sicherheit bei Benutzung vom SETUID-Bit
 
-(Die Änderung der passwd-Datei. Wie viele passwd-Dateien gibt es? Wie sehen die Zugriffsrechte auf sie aus? Bei welcher Datei wird das SETUID-Bit gesetzt?)
-
-Die Datei, in der unter UNIX die Passwörter aller Benutzer gespeichert sind, kann nur von root beschrieben werden. Dennoch sollte jeder Benutzer die Möglichkeit haben, sein eigenes Passwort zu ändern. Dazu gibt es das Programm usr/bin/passwd, bei welchem das s-bit gesetzt ist. Der Prozess erhält beim Aufruf die Rechte des Besitzers, also root, und kann die Passwortdatei ändern. Das Programm wird aber nur die Änderung des eigenen Passwortes erlauben.
+Die Datei, in der unter UNIX die Passwörter aller Benutzer gespeichert sind, kann nur von root beschrieben werden. Dennoch sollte jeder Benutzer die Möglichkeit haben, sein eigenes Passwort zu ändern. Dazu gibt es das Programm `/usr/bin/passwd`, bei welchem das s-bit gesetzt ist. Der Prozess erhält beim Aufruf die Rechte des Besitzers, also root, und kann die Passwortdatei ändern. Das Programm wird aber nur die Änderung des eigenen Passwortes erlauben.
 
 ## 6.7 Wie funktioniert die Spooling-Technik
 
-Ein Spooling ist eine Warteschlange oder ein Puffer, um die Dateien aufzunehmen, die z.B. ausgedruckt werden sollen. Diese Warteschlange muss geschützt werden, es kann nicht sein, dass jeder Benutzer-Prozess einfach seine Datei in die Warteschlange schreiben darf.
+Ein Spooling ist eine Warteschlange oder ein Puffer, um die Dateien aufzunehmen, die z.B. ausgedruckt werden sollen.
+
+Diese Warteschlange muss geschützt werden (nicht jeder Benutzer-Prozess darf seine Datei in die Warteschlange schreiben).
 Also braucht man ein Druckerprogramm, bei der Ausführung des Programms wird ein spezieller Prozess erzeugt, der das Schreiben in die Warteschlange übernimmt. Dieser Prozess gehört einem speziellen Benutzer `daemon`, nur er darf das Programm schreiben und lesen, die anderen können das Programm nur ausführen(mit Schutzbits: `rwxs--x--x)`. Wenn das s-bit des Programm gesetzt wird, kann auch jeder Benutzer mit den Rechten des Besitzers das Druckerprogramms ausführen. Das Schreiben in die Warteschlange wird durch das Programm kontrolliert.
 
 ## 6.8 Was ist eine Zugriffskontrollliste
 
 Ganz allgemein ermöglichen Zugriffskontrollen, einzelnen Subjekten den Zugriff auf einzelne Objekte zu erlauben oder zu verbieten.
 
-Die Zugriffskontrollliste (access control list, ACL) gehört dabei zu den granulatorientieren(objektorientierten) Implementierungen, da die Rechtefestlegungen **beim Objekt** gespeichert werden (im Gegensatz zur subjektorientierten Implementierung).
+Die Zugriffskontrollliste (access control list, ACL) gehört dabei zu den *granulatorientierten*(objektorientierten) Implementierungen, da die Rechtefestlegungen **beim Objekt** gespeichert werden (im Gegensatz zur subjektorientierten Implementierung).
 
-Eine ACL ist ein Record, wobei jeder Eintrag für jeden zu einer Domäne gehörenden Prozess angibt, für welche Modi der Zugriff erlaubt ist, siehe Abb. 6.3., Skript S. 228.
+Eine ACL ist ein Record, wobei jeder Eintrag für jeden zu einer Domäne gehörenden Prozess angibt, für welche Modi der Zugriff erlaubt ist.
 Es gibt ferner die "benannten ACLs": Man kann ACLs als eigenständige Einheit auffassen, ihnen einen Namen geben und mehreren Objekten die gleiche benannte ACL zuweisen.
 
 ## 6.8.1 Was ist der Vorteil
@@ -89,7 +89,7 @@ Bsp. `rwxrw-r--`
 
 ### 6.9.1 Wie werden die Rechte einer Datei für einen Benutzer ausgewertet
 
-Die Schutzbits werden immer der Reihe nach geprüft. Wenn ich Mitglied in einer Gruppe bin und diese Gruppe keinen Zugriff hat, wird mir der Zugriff verweigert, auch wenn alle übrigen Zugriff bekommen.
+Die Schutzbits werden immer der Reihe nach geprüft (Eigentümer -> Gruppe -> Other): Wenn ich Mitglied in einer Gruppe bin und diese Gruppe keinen Zugriff hat, wird mir der Zugriff verweigert, auch wenn alle übrigen Zugriff bekommen.
 
 ### 6.9.2 Wie kann man mit Schutzbits realisieren, dass eine Datei allen bis auf eine Gruppe von bestimmten Personen zugänglich ist
 
@@ -105,9 +105,11 @@ Eine Capability besteht aus einem Objektverweis plus die Operationen auf dem Obj
 
 ### 6.11.1 Kann man ein Beispiel geben, wie es funktioniert
 
-Wenn ein Prozess eine Datei mit open() öffnen will, sucht das Dateisystem zuerst die Lokalisierung der Datei auf der Festplatte. Danach erzeugt das Betriebssystem einen Dateikontrollblock (ein Dateikontrollblock heißt bei UNIX auch i-node) für die Datei, in dem der Besitzer der Datei, Gruppe, Opreationen auf der Datei (read, write, append), i-node usw. stehen. Das Dateikontrollblock wird in eine Tabelle von allen offenen Dateien (system-wide open-file table) eingetragen, die zur Verwaltung der offenen Dateien vom Betriebssystem gebraucht wird. Die Stelle des Dateikontrollblocks in der Tabelle ist eine ganze Zahl, also eine Nummer. Diese Nummer wird wieder in die Tabelle der offenen Dateien des Prozesses (per-process open-file table) eingetragen. Die Tabelle per-process open-file table heißt in Kurseinheit 7 Umsetztabelle des Prozesses, der Nummer des Dateikontrollblocks heißt Dateiidentifizierer, siehe
-Abbildung 7.3 im Kurseinheit 7.
-Jetzt werden die Rechte des Prozesses (Subjektes) auf die Datei im Betriebssystem aufbewahrt. Der Prozess hat auch nur die Rechte auf die Datei, die bei der Erzeugung des Dateikontrollblocks übergeben wurden. Wenn der Prozess die Datei lesen oder schreiben möchte, muss er den Dateiidentifizierer als Index zum system-wide open-file table als Parameter übergeben. Dieser Dateiidentifizierer ist der Objektverweis oder das Ticket.
+Wenn ein Prozess eine Datei mit open() öffnen will, sucht das Dateisystem zuerst die Lokalisierung der Datei auf der Festplatte. Danach erzeugt das Betriebssystem einen Dateikontrollblock für die Datei, in dem der Besitzer der Datei, Gruppe, Operationen auf der Datei (read, write, append)usw. stehen. Der Dateikontrollblock wird in eine Tabelle von allen offenen Dateien (system-wide open-file table) eingetragen, die zur Verwaltung der offenen Dateien vom Betriebssystem gebraucht wird. Die Stelle des Dateikontrollblocks in der Tabelle ist eine ganze Zahl, also eine Nummer. Diese Nummer wird wieder in die Tabelle der offenen Dateien des Prozesses (per-process open-file table) eingetragen.
+
+![Jede geöffnete Datei hat einen Dateikontrollblock.](img/fcb.png)
+
+Jetzt werden die Rechte des Prozesses (Subjektes) auf die Datei im Betriebssystem aufbewahrt. Der Prozess hat auch nur die Rechte auf die Datei, die bei der Erzeugung des Dateikontrollblocks übergeben wurden. Wenn der Prozess die Datei lesen oder schreiben möchte, muss er den Dateiidentifizierer als Index zur *system-wide open-file table* als Parameter übergeben. Dieser Dateiidentifizierer ist der Objektverweis oder das Ticket.
 
 ## 6.12 Was ist die Schwäche diskretionärer Zugriffskontrollen
 

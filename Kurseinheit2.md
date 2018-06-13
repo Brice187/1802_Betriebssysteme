@@ -94,12 +94,12 @@ Bei heute üblichen Systemen schaltet das BS den Prozessor mehrmals pro Sekunde
 
 Damit ein Prozesswechsel statt finden kann, muss die CPU vorher aus dem Benutzermodus in den Systemmodus wechseln, da die *interrupt service routines* nur durch privilegierte Befehle aufgerufen werden können. Einem Prozesswechsel geht also immer ein Moduswechsel voraus.
 
-## 2.9 Was heiﬂt nicht-präemptiv? Was heiﬂt präemptiv
+## 2.9 Was heißt nicht-präemptiv? Was heißt präemptiv
 
 * Bei **nicht-präemptiven** Betriebssystemen entscheidet nur Prozess selbst, ob er den Prozessor wieder abgeben möchte.
 * Bei **präemptiven** Systemen entzieht das BS einem laufenden Prozess den Prozessor.
 
-## 2.10 Welche Qualitätsmerkmale von Scheduling-Strategien gibt es
+## 2.10 Qualitätsmerkmale von Scheduling-Strategien
 
 * Maximale Effizienz, d.h. hohe Prozessorauslastung
 * Minimale Antwortzeiten
@@ -117,15 +117,7 @@ Die gerechte Verteilung des Prozessors innerhalb eines Zeitabschnitts.
 
 ## 2.11 Welche Scheduling-Strategien mit Vor- und Nachteilen sind geeignet für ein Batchbetrieb
 
-* First Come, First Serve:
-    * **Vorteile**:
-        * Einfache Implementierung
-        * geringer Verwaltungsaufwand
-        * Fair
-    * **Nachteile**:
-        * kurze Prozesse müssen ggf. lange warten
-
-Grundsätzlich alle nicht-präemptiven Strategien für den Batchbetrieb geeignet
+Grundsätzlich sind alle nicht-präemptiven Strategien für den Batchbetrieb geeignet
 
 ## 2.12 Welche Scheduling-Strategien mit Vor- und Nachteilen sind geeignet für ein nicht-kooperativen (präemptiv) interaktiver Betrieb
 
@@ -135,9 +127,11 @@ Mit der Strategie „Multiple Queues“ werden Prozesse in verschiedene Klassen 
 * Dialogprozesse
 * Hintergrundprozesse (batch jobs).
 
-Für jede Klasse ist ein eigener Scheduler zuständig. Gesamtscheduling so eingestellt, dass Dialogprozesse bevorzugt werden.
+Für jede Klasse ist ein eigener Scheduler zuständig.
 
 ### 2.12.1 Wie kann man diese Strategien so einstellen, dass sie interaktive Prozesse bevorzugen
+
+Gesamtscheduling so eingestellt, dass Dialogprozesse eine höhere Priorität haben und somit bevorzugt werden.
 
 ## 2.13 Beschreiben Sie die einzelnen Scheduling-Strategien mit Vor- und Nachteilen
 
@@ -146,7 +140,7 @@ Für jede Klasse ist ein eigener Scheduler zuständig. Gesamtscheduling so ein
 * **First Come First Served (FCFS)**: Prozesse werden nach Eingangsreihenfolge vom Prozessor bearbeitet.
     * **Vorteile**:
         * einfach zu implementieren (FIFO-Queue)
-        * Zeitbedarf für Einfügen + Entfernen konstant
+        * Zeitbedarf für Einfügen + Entfernen konstant (geringer Verwaltungsaufwand)
         * Fairness, da alle Prozesse der Reihe nach den Prozessor erhalten.
     * **Nachteile**
         * kurz laufende Prozesse müssen u. U. sehr lange warten, daher für Dialogsysteme nicht geeignet.
@@ -219,7 +213,7 @@ Programm- und Datensegment teilen sich die verschiedenen Threads eines Prozesses
 
 * Kernel hat keinerlei Kenntnis davon, ob ein Prozess mehrere Threads verwendet.
 * Jeder Prozess hat eigenen, privaten Thread-Kontrollblock, analog zum PCB.
-* Eigenes Scheduling der Threadsa
+* Eigenes Scheduling der Threads
 * Nachteil: Der ganze Prozess blockiert, wenn ein Benutzer-Thread blockiert.
 
 #### Kernel-Threads
@@ -232,10 +226,6 @@ Programm- und Datensegment teilen sich die verschiedenen Threads eines Prozesses
 
 Es können im Multiprozessor-Rechnern nur Kernel-Threads parallel eingesetzt werden, da das Betriebssystem bei Benutzer-Threads keine Kenntnis davon haben kann, ob der aktuelle Prozess mehrere parallel ausführbare Threads hat.
 
-### 2.18.4 Welche Scheduling-Strategien kann man bei Benutzer-Threads verwenden? Warum
+### 2.18.4 Welche Scheduling-Strategien kann man bei Benutzer-Threads verwenden? Warum kann man nur nicht-präemptive Scheduling-Strategien bei Benutzer-Threads verwenden
 
-Es kommen nur nicht-präemptive Scheduling-Strategien in Frage. #TODO: Warum
-
-### 2.18.5 Warum kann man nur nicht-präemptive Scheduling-Strategien bei Benutzer-Threads verwenden
-
-Ein Benutzer-Thread kann nicht ohne besonders trickige Programmierung von seinem eigenen Prozess zu einer Unterbrechung gezwungen werden
+Es kommen nur nicht-präemptive Scheduling-Strategien in Frage, da Benutzer-Thread nicht ohne besonders trickige Programmierung nicht vom eigenen Prozess zu einer Unterbrechung gezwungen werden kann.

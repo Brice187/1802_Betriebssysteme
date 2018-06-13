@@ -55,13 +55,15 @@ Ein Prozess braucht nicht die physischen Adressen bei der Ausführung eines Pro
 
 ## 3.5 Welche Speicherzuweisungsstrategien zur Verwaltung des Hauptspeichers gibt es
 
-Bei MVT gibt es bei der Auswahl eines freien Segments Verfahren: First Fit, Next Fit, Best Fit, Worst Fit und Buddy.
+### Einfach zusammenhängende Speicherzuweisung 
 
-* **Einfach zusammenhängende Speicherzuweisung**: Es befindet sich zu jedem Zeitpunkt maximal ein Benutzerprozess im Hauptspeicher.
+Es befindet sich zu jedem Zeitpunkt maximal ein Benutzerprozess im Hauptspeicher.
 
 ![Einfache zusammenhängende Speicherzuweisung](img/einfach.png)
 
-* **Mehrfach zusammenhängende Speicherzuweisung**: Mehrere Programme und deren Daten werden nebeneinander aufgenommen.
+### Mehrfach zusammenhängende Speicherzuweisung
+
+Mehrere Programme und deren Daten werden nebeneinander aufgenommen.
 
 1. **MFT**: multiprogramming with a fixed number of tasks.
     * Fixe Segmentgrößen im Speicher
@@ -81,9 +83,7 @@ Scheduling Strategien:
 
 ![MVT: Externe Fragmentierung tritt auf.](img/MVT.png)
 
-* **Buddy**:
-
-Der zugewiesene Speicherplatz wird immer auf die nächsthöhere 2er-Potenz aufgerundet. Bei 100 angeforderten Bytes würden also 128 zugeteilt -> **interne Fragmentierung**
+* **Buddy**: Der zugewiesene Speicherplatz wird immer auf die nächsthöhere 2er-Potenz aufgerundet. Bei 100 angeforderten Bytes würden also 128 zugeteilt -> **interne Fragmentierung**
 
 ![Das Buddy-Verfahren zur Speicherzuteilung.](img/buddy.png)
 

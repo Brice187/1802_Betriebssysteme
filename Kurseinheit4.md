@@ -11,8 +11,7 @@ Die kritischen Abschnitte der beiden Prozesse müssen dann synchronisiert werde
 ## 4.1.1 Was ist ein kritischer Abschnitt eines Prozesses
 
 Kritische Abschnitte sind Abschnitte, die lesend und/oder schreibend gemeinsame Daten verarbeiten, die von mehreren konkurrierenden Prozessen genutzt werden. Damit kritische Abschnitte determinierte Resultate zur Folge haben, müssen solche Abschnitte ohne Störung durch die konkurrierenden Prozesse in einer Sequenz ausgeführt werden.
-Innerhalb eines kritischen Abschnitts greift ein Prozess exklusiv auf gemeinsam benutze Betriebsmittel zu.
-*Nicht gemeinsam benutzbare* Betriebsmittel (z.B. Drucker, Diskettenlaufwerk) können von konkurrierenden Prozessen nur in kritischen Abschnitten belegt werden.
+Innerhalb eines kritischen Abschnitts greift ein Prozess exklusiv auf gemeinsam benutzte Betriebsmittel zu. *Nicht gemeinsam benutzbare* Betriebsmittel (z.B. Drucker, Diskettenlaufwerk) können von konkurrierenden Prozessen nur in kritischen Abschnitten belegt werden.
 
 ## 4.2 Warum ist der wechselseitige Ausschlusses notwendig/ Warum ist die Synchronisation von Prozessen notwendig
 
@@ -42,8 +41,6 @@ Lösungsmöglichkeit:
 ### 4.3.1 An welche Problemen leidet dieses Verfahren
 
 Wenn sich ein Prozess in seinem kritischen Abschnitt befindet, sollte kein anderer Prozess ständig nachfragen, ob er in den kritischen Abschnitt eintreten darf. Dieses Verfahren heißt **busy waiting** und ist unwirtschaftlich, da unproduktive Prozessorzeit benötigt wird.
-
-(busy waiting, bestimmte Ausführungsreihenfolge, was kann passieren, wenn Prozessen bestimmte Prioritäten zugewiesen werden? )
 
 ## 4.4 Was ist ein Semaphor
 
@@ -163,8 +160,8 @@ Bei der Verhinderung von Deadlocks wird versucht, zumindest eine der vier Deadlo
 1. **Bedingung** scheidet aus, da die wechselseitiger Ausschluss i.d.R. erforderlich ist
 2. **Bedingung** Möglich durch Ressourcenentzug: Prozess müsste alle Betriebsmittel zurückgeben und diese wieder zusammen mit dem neuen Betriebsmittel anfordern -> würde funktionieren, ist aber nicht immer praktikabel, da z.B. einem Prozess ein Ausgabegerät nicht entzogen werden kann, auf das er gerade etwas ausgibt.
 3. **Bedingung** Prozess müsste alle in Zukunft benötigten Betriebsmittel von Anfang an anfordern (alle oder keines).
-   * Nachteil: Lösung ist nicht effizient und man kann nicht immer im Voraus sehen, wie viele Ressourcen benötigt werden.
+    * Nachteil: Lösung ist nicht effizient und man kann nicht immer im Voraus sehen, wie viele Ressourcen benötigt werden.
 4. **Bedingung** lineare Ordnung der Betriebsmittel ("wichtiger als") -> nur weniger wichtige Betriebsmittel können nachträglich angefordert werden; funktioniert, da die weniger wichtigen Betriebsmittel nur von Prozessen blockiert werden können, die auf noch weniger wichtige Betriebsmittel warten.
-   * Nachteil: Eine vernünftige Ordnung für alle Ressourcen kann man kaum finden.
+    * Nachteil: Eine vernünftige Ordnung für alle Ressourcen kann man kaum finden.
 
 ### 4.11.2 Was wird in der Praxis gemacht
