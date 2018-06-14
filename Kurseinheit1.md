@@ -8,13 +8,13 @@ Ein Betriebssystem ist eine Menge von Programmen, die es ermöglichen, den Rechn
 
 * **Gerätesteuerung**: Hardwareunabhängigkeit, Dienste sollen möglichst im Betriebssystem lokalisiert/gesteuert werden. (Betriebssystem als *control program*)
 * **Schutz**: Vorhandenen Speicher verwalten und die Daten einzelner Benutzer vor unbefugten Zugriffen schützen.
-* **Entdeckung/ Behandlung von Fehlern**: Bei jedem Fehler muss das Betriebssystem geeignet reagieren. z.B.
+* Entdeckung/ Behandlung von **Fehlern**: Bei jedem Fehler muss das Betriebssystem geeignet reagieren. z.B.
     * Division durch 0
     * Benutzung illegaler Adressen bei der Ausführung von Applikationen
     * Defekte in Leitungen, Datenträgern oder Laufwerken
     * Papierstau im Drucker
 * **Mehrprogrammbetrieb**: Rechner gleichzeitig von mehreren Benutzern benutzt werden. Jeder Benutzer lässt eigene Applikationen ausführen
-* **Unterschiedliche Betriebsarten**: Wie arbeitet das Betriebssystem Aufträge ab? (Dialog-, Stapel- und Echtzeitbetrieb)
+* Unterschiedliche **Betriebsarten**: Wie arbeitet das Betriebssystem Aufträge ab? (Dialog-, Stapel- und Echtzeitbetrieb)
 * **Prozess-Synchronisation und -Kommunikation**: zusammengehörige, parallele Prozesse müssen Nachrichten austauschen und sich bei der Benutzung gemeinsamer Daten oder anderer Ressourcen synchronisieren können
 * **Ressourcenverwaltung**: Das Betriebssystem muss Ressourcen verwalten und bei konkurrierenden Anforderungen entscheiden, wie und in welcher Reihenfolge die Anforderungen bedient werden sollen. Hierbei ist anzustreben, alle Anforderungen möglichst rasch, vollständig und fair zu erfüllen, die vorhandenen Ressourcen voll auszunutzen und zugleich den Verwaltungsaufwand zu minimieren
     * CPU
@@ -33,6 +33,8 @@ Ein Betriebssystem ist eine Menge von Programmen, die es ermöglichen, den Rechn
     * Formatierung
 
 Die Festlegung von Art und Umfang dieser Funktionen wird vom intendierten Anwendungsbereich und Annahmen über die Leistungsfähigkeit der unterliegenden Hardware und deren Kosten abhängen.
+
+> ***Merksatz:*** **G**ustav **S**ucht **F**eine **M**uscheln **B**ei **P**uerto **R**ico (**K**aribischer **A**rchipel)
 
 ### 1.1.2 Wo liegt das Betriebssystem in einem Schichtenmodell im Computersystem? Welche Schnittstellen bietet das Betriebssystem an
 
@@ -251,3 +253,5 @@ Zentrale Fragestellungen:
 * Mehrere Benutzer arbeiten über eigenes Terminal an genau einem Prozess
 * Beispiel: transaktionsorientierte Systeme wie Flugbuchungen, POS, ATM (typische Basis sind DBMS)
 * einzelnes Programm wird parallel über mehrere Schnittstellen bedient
+
+> ***Merksatz:*** **I**ndische **S**uppe **H**ärtet **R**uhige **T**ypen

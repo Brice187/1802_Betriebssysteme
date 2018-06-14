@@ -25,6 +25,8 @@ Damit die Resultate von Abläufen konkurrierender Prozesse determiniert bleiben
 4. Kein Prozess darf **außerhalb** eines kritischen Abschnittes einen anderen Prozess **blockieren**.
 5. Ein Algorithmus zur Realisierung des wechselseitigen Ausschlusses darf nicht auf irgendwelchen Annahmen über die **relative oder absolute Ausführungsgeschwindigkeit** der Prozesse beruhen.
 
+> ***Merksatz:*** **E**uropäische **Z**entral **F**inanz **B**ank **G**esellschaft
+
 ## 4.3 Was sind globale Synchronisationsvariablen
 
 Eine globale Variable **s**, mit welcher ein Prozess den kritischen Abschnitt für den jeweils anderen freigibt.
@@ -132,6 +134,8 @@ Wenn die vier Bedingungen erfüllt sind und keine zusätzliche externe Ressource
 2. **Nicht-Unterbrechbarkeit (no preemption)**: Die Betriebsmittel können temporär nicht zurückgegeben werden, sondern bleiben dem Prozess bis zum Ende der Anforderung zugeordnet.
 3. **Halte-und-Warte (Hold-and-wait)**: Die Prozesse belegen exklusiv ein Betriebsmittel während sie noch auf weitere Betriebsmittel warten.
 4. **Zyklische Warte-Bedingung (circular wait)**: Es besteht eine geschlossene Kette aus Prozessen und Betriebsmitteln in der Weise, dass jeder Prozess ein oder mehrere Betriebsmittel belegt, die vom nächsten Prozess in der Kette benötigt werden.
+
+> ***Merksatz:*** **W**eine **N**icht, **H**ippes **Z**ebra
 
 ## 4.9 Wie kann man ein Deadlock erkennen
 

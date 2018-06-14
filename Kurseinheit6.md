@@ -8,6 +8,8 @@
 * **Schutz vor finanziellem Verlust**: Rechner wird von Personen benutzt, die hierfür nicht zugelassen sind und die Kosten nicht tragen
 * **Schutz vor Missbrauch**:  kriminellen Handlungen (Botnet / Spam etc.)
 
+> ***Merksatz:*** **V**ertrauen **I**st **V**oll **F**ehleranfällig, **M**an
+
 ## 6.2 Was sind der Unterschied zwischen dem persistenten und transienten Rechtezustand
 
 * **persistent**: der Systemabschaltungen überdauernde Zustand eines Rechners. Der persistente Rechtezustand macht direkt oder indirekt Aussagen darüber, welche Subjekte auf welchen Objekten welche Operationen ggf. mit welchen Parametern (nicht) ausführen dürfen. Man erkennt sofort, dass nur solche Subjekte und Objekte im Rahmen des persistenten Rechtezustands Sinn machen, die ebenfalls persistent sind; Prozesse sind z. B. keine persistenten Subjekte. In vielen Systemen sind nur Dateien persistente Objekte (Linux: alles ist eine Datei)

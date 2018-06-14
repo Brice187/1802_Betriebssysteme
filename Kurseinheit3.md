@@ -10,10 +10,6 @@ Den physischen Hauptspeicheradressen werden logische Adresse zugewiesen. Ein log
 
 Eine logische Adresse ist hardwareunabhängig: sie zeigt auf einen Ort unabhängig von der konkreten Zuweisung zwischen Datenbereichen und physischem Hauptspeicher. Vor jedem Zugriff auf eine logische Adresse muss diese zunächst in eine physische Adresse übersetzt werden. Die MMU bildet logische Adressen auf physische Adressen im Hauptspeicher ab.
 
-
-
-(logische Adressen, dynamisches Binden, paging)
-
 ### 3.1.3 Die Isolierung des Speichers jedes einzelnen Prozesses (durch die Hardware) muss realisiert werden
 
 Das **Grenzregister** ist die Grenze, ab welchem im Hauptspeicher Adressbereich für Applikationen vergeben werden können. Das Grenzregister kann im Kernelmodus gesetzt werden.
@@ -55,7 +51,7 @@ Ein Prozess braucht nicht die physischen Adressen bei der Ausführung eines Pro
 
 ## 3.5 Welche Speicherzuweisungsstrategien zur Verwaltung des Hauptspeichers gibt es
 
-### Einfach zusammenhängende Speicherzuweisung 
+### Einfach zusammenhängende Speicherzuweisung
 
 Es befindet sich zu jedem Zeitpunkt maximal ein Benutzerprozess im Hauptspeicher.
 
@@ -122,11 +118,13 @@ Eine Seite habe **p** Speicherzellen, die logische Adresse **v** liegt dann in S
 
 Beispiel:
 
+```
 Seitengröße (p) = 5
 logische Adresse (v) = 16
 =>
-Seitennummer (s) = 16/5 = **3**
-Offset (d) = 16 *mod* 5 = **1**
+Seitennummer (s) = 16/5 = 3
+Offset (d) = 16 *mod* 5 = 1
+```
 
 ### 3.8.3 Wie wird eine logische Adresse bei paging auf eine physische Adresse abgebildet
 

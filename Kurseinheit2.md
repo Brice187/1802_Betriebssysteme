@@ -101,11 +101,13 @@ Damit ein Prozesswechsel statt finden kann, muss die CPU vorher aus dem Benutzer
 
 ## 2.10 Qualitätsmerkmale von Scheduling-Strategien
 
-* Maximale Effizienz, d.h. hohe Prozessorauslastung
-* Minimale Antwortzeiten
-* Minimale Durchlaufzeiten
-* Maximaler Durchsatz
-* Fairness, also gerechte Verteilung des Prozessors.
+* Maximale **Effizienz**, d.h. hohe Prozessorauslastung
+* Minimale **Antwortzeiten**
+* Minimale **Durchlaufzeiten**
+* Maximaler **Durchsatz**
+* **Fairness**, also gerechte Verteilung des Prozessors.
+
+> ***Merksatz:*** **E**nten **A**hnen **D**eine **D**auerhafte **F**urcht
 
 ### 2.10.1 Können sie gleichzeitig erfüllt werden? Welche Konflikte gibt es zwischen den Qualitätsmerkmalen
 
